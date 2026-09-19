@@ -55,27 +55,27 @@ theme = 'hugo-theme-spectra'
   enableScrollAnimation = true
 
   # === Share ===
-  sharePlatforms = ['twitter', 'linkedin']
+  sharePlatforms = ['bluesky', 'linkedin']
 
   # === Academic profiles ===
   # TODO: paste your URLs and uncomment. LinkedIn has a built-in icon;
   # ORCID and Google Scholar fall back to a generic external-link icon.
-  # [[params.social]]
-  #   name = "ORCID"
-  #   url = "https://orcid.org/0009-0008-2468-8870"
-  # [[params.social]]
-  #   name = "Google Scholar"
-  #   url = "https://scholar.google.com/citations?user=..."
-  # [[params.social]]
-  #   name = "LinkedIn"
-  #   url = "https://www.linkedin.com/in/..."
+  [[params.social]]
+  name = "ORCID"
+  url = "https://orcid.org/0009-0008-2468-8870"
+  [[params.social]]
+  name = "Google Scholar"
+  url = "https://scholar.google.com/citations?hl=en&user=jgY_JOAAAAAJ"
+  [[params.social]]
+  name = "LinkedIn"
+  url = "https://www.linkedin.com/in/vidhyakorn"
 
   # === Style Overrides ===
   # Uncomment to tint the theme; left off so Spectra's own palette applies.
-  # [params.style]
-  #   colorAccent = '#2c4a80'
-  #   colorAccentWarm = '#c49c42'
-  #   colorAccentSoft = '#7d94c4'
+ [params.style]
+ colorAccent = '#369d00'
+ colorAccentWarm = '#003463'
+ colorAccentSoft = '#eeeeee'
 
   [params.sidebar]
     showAllPosts = true

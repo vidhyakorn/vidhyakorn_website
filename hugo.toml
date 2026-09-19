@@ -54,6 +54,10 @@ theme = 'hugo-theme-spectra'
   enableCodeCopy = true
   enableScrollAnimation = true
 
+  # === Your own CSS/JS (loaded after the theme, so it overrides) ===
+  customCSS = ['css/custom.css']
+  # customJS  = ['js/custom.js']
+
   # === Share ===
   sharePlatforms = ['bluesky', 'linkedin']
 

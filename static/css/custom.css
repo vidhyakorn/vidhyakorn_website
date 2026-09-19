@@ -1,0 +1,42 @@
+/* ===========================================================================
+   Your own CSS. Loaded after the theme, so anything here wins.
+   Referenced from hugo.toml as:  customCSS = ['css/custom.css']
+
+   Edit, save, and refresh the browser (hugo server picks it up immediately).
+   =========================================================================== */
+
+/* --- Portrait at the top of the About page ---------------------------------
+   Targets the image in the first paragraph of an article, which is where the
+   photo sits on About. Change max-width to resize it; 220px is about a third
+   of the column. Delete border-radius for square corners. */
+.article-content > p:first-child img {
+  max-width: 220px;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Want it centred instead of left-aligned? Uncomment: */
+/*
+.article-content > p:first-child {
+  text-align: center;
+}
+*/
+
+/* Want it circular, like the sidebar avatar? Uncomment: */
+/*
+.article-content > p:first-child img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+*/
+
+/* Want the text to wrap around it? Uncomment: */
+/*
+.article-content > p:first-child img {
+  float: left;
+  margin: 0 24px 12px 0;
+  max-width: 180px;
+}
+*/

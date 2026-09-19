@@ -6,7 +6,7 @@ baseURL = 'https://vidhyakorn.github.io/vma/'
 locale = 'en'
 defaultContentLanguage = 'en'
 defaultContentLanguageInSubdir = false
-title = 'Vidhyakorn Mahd-Adam'
+title = 'VMA'
 theme = 'hugo-theme-spectra'
 
 [outputs]
@@ -21,18 +21,18 @@ theme = 'hugo-theme-spectra'
 
 [params]
   # === Identity ===
-  description = 'History and philosophy of science and medicine — epidemiological modelling, vaccine policy and health surveillance, from MORU in Bangkok.'
-  author = 'Vidhyakorn Mahd-Adam'
-  tagline = '// History & Philosophy of Science and Medicine'
-  bio = 'Researcher at MORU, Bangkok. Epidemiological modelling, vaccine policy, and the populations standard surveillance cannot see.'
+  description = 'Vidhyakorn Mahd-Adam — epidemiological modelling, vaccine policy and health surveillance, from MORU in Bangkok.'
+  author = 'VMA'
+  tagline = 'History & Philosophy of Science and Medicine'
+  bio = 'Research Assisatnt at MORU, Bangkok.'
   avatar = '/img/profile.jpg'
   # Banner background image. Left unset, the theme draws its own gradient.
   # banner = '/img/banner.webp'
 
   # === Banner Text ===
-  bannerTitle = 'History & Philosophy of'
-  bannerHighlight = 'Science and Medicine'
-  bannerSubtitle = '// epidemiology · health policy · surveillance'
+  bannerTitle = 'Vidhyakorn Mahd-Adam'
+  bannerHighlight = ' '
+  bannerSubtitle = 'sciencentific approach as an application using history and philosiphy of scince and medicine'
 
   # === Content Limits ===
   homepagePostsLimit = 10

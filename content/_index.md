@@ -1,3 +1,3 @@
 ---
-title: "Vidhyakorn Mahd-Adam"
+title: "VMA"
 ---

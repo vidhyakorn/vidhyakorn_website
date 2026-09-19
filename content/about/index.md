@@ -4,39 +4,25 @@ date: 2026-09-18
 layout: "page"
 draft: false
 toc: false
-description: "Researcher at MORU, Bangkok — epidemiological modelling, health policy and the history and philosophy of science and medicine."
+description: "Research Assistant at MORU, Bangkok."
 ---
 
 ![Vidhyakorn Ameen Mahd-Adam](profile.jpg "Vidhyakorn Ameen Mahd-Adam")
 
-I'm a researcher at MORU (Mahidol Oxford Tropical Medicine Research Unit) in
-Thailand, where I focus on epidemiological modelling, health policy analysis,
-vaccine effectiveness evaluation, and infectious disease research. My work
-bridges quantitative methods with real-world public health challenges in
-Southeast Asian contexts.
+I'm a research assistant at MORU (Mahidol Oxford Tropical Medicine Research Unit) in
+Bangkok, Thailand, where I focus on epidemiological and social modelling, health policy analysis, and understanding of health, disease, well-being from interdisciplinary perspective. I use quantitative methods with real-world public health challenges in LMIC contexts.
 
-Currently, I'm developing a PhD research proposal on the **Functional
-Population Health Framework (FPHF)** — a novel approach to modelling
-"functional populations" including undocumented migrants, cross-border
-populations, and international travellers who are epidemiologically present
-but officially invisible in standard health surveillance systems.
+I am deeply interested in the History and Philosophy of Science and Medicine. I view history as a dynamic phenomenon that full of data and patterns across time to help anticipate the future. Complementing this, I approach philosophy as the critical tool through which we interpret these historical patterns, judgement what to serve human development. I believe we need to constantly re-evaluate the frameworks we use to understand human knowledge.
 
-Before joining MORU, I worked at the International Organization for
-Migration (IOM) managing health data systems for migrant populations across
-Southeast Asia. I use R and Python extensively for statistical modelling,
-sensitivity analysis, and building reproducible analytical pipelines. I'm
-also deeply interested in knowledge management systems, using Obsidian and
-Zettelkasten methodology to organise research literature and develop ideas.
 
 ## At a glance
 
-- **Position** — Researcher, MORU Thailand
+- **Position** — Research Assistant, Mahidol-Oxford Tropical Medicine Research Unit (MORU), Bangkok, Thailand
 - **Location** — Bangkok, Thailand
-- **Focus** — Epidemiology · Health Policy · Vaccine Effectiveness
-- **Tools** — R · Python · Quarto · LaTeX
+- **Focus** —   - Computational Methods Population · Dynamic ·  Capabilities Approach ·  Bio-psychosocial Model ·  Neurodiversity ·  Social Deviant & -Others ·  Social Theories of Health and Diseases
 
 ## Connect
 
-- GitHub: [github.com/yourusername](https://github.com/yourusername)
-- LinkedIn: [linkedin.com/in/yourusername](https://linkedin.com/in/yourusername)
-- ORCID: [orcid.org/0000-0000-0000-0000](https://orcid.org/0000-0000-0000-0000)
+- GitHub: [github.com/vidhyakorn](https://github.com/vidhyakorn)
+- LinkedIn: [linkedin.com/in/vidhyakorn](https://linkedin.com/in/vidhyakorn)
+- ORCID: [orcid.org/0009-0008-2468-8870](https://orcid.org/0009-0008-2468-8870)

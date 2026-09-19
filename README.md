@@ -1,6 +1,6 @@
-# vidhyakorn.github.io
+# vma
 
-Personal research site — history and philosophy of science and medicine,
+Personal research site, published at https://vidhyakorn.github.io/vma/ — history and philosophy of science and medicine,
 epidemiological modelling, vaccine policy and health surveillance.
 
 Built with [Hugo](https://gohugo.io) and the
@@ -14,8 +14,8 @@ non-extended build cannot do.
 ## Working locally
 
 ```bash
-git clone https://github.com/vidhyakorn/vidhyakorn.github.io.git
-cd vidhyakorn.github.io
+git clone https://github.com/vidhyakorn/vma.git
+cd vma
 hugo server -D
 ```
 

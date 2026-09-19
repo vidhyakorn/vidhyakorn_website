@@ -2,7 +2,7 @@
 # Started from the theme's exampleSite/hugo.toml. Spectra ships its own defaults
 # in themes/hugo-theme-spectra/hugo.toml, which Hugo merges automatically.
 
-baseURL = 'https://vidhyakorn.github.io/'
+baseURL = 'https://vidhyakorn.github.io/vma/'
 locale = 'en'
 defaultContentLanguage = 'en'
 defaultContentLanguageInSubdir = false

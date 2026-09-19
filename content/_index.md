@@ -1,3 +1,3 @@
 ---
-title: "Vidhyakorn Ameen Mahd-Adam"
+title: "Vidhyakorn Mahd-Adam"
 ---

@@ -1,0 +1,66 @@
+name: Deploy Hugo site to Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Spectra requires Hugo Extended 0.157.0 or newer.
+      HUGO_VERSION: 0.166.0
+    steps:
+      - name: Install Hugo CLI
+        run: |
+          curl -sL "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb" -o /tmp/hugo.deb
+          sudo dpkg -i /tmp/hugo.deb
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # The theme lives in the repo as ordinary files, so there is nothing
+          # to fetch beyond the checkout itself.
+          fetch-depth: 0
+      - name: Sanity check — the theme must be present
+        run: |
+          test -f themes/hugo-theme-spectra/theme.toml \
+            || { echo "::error::themes/hugo-theme-spectra is missing from the repo"; exit 1; }
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+      - name: Build with Hugo
+        env:
+          HUGO_ENVIRONMENT: production
+        run: |
+          hugo \
+            --minify \
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

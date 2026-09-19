@@ -1,0 +1,136 @@
+# Spectra — https://github.com/JoeYang1412/hugo-theme-spectra
+# Started from the theme's exampleSite/hugo.toml. Spectra ships its own defaults
+# in themes/hugo-theme-spectra/hugo.toml, which Hugo merges automatically.
+
+baseURL = 'https://vidhyakorn.github.io/'
+locale = 'en'
+defaultContentLanguage = 'en'
+defaultContentLanguageInSubdir = false
+title = 'Vidhyakorn Mahd-Adam'
+theme = 'hugo-theme-spectra'
+
+[outputs]
+  home = ['HTML', 'RSS', 'JSON']
+
+[pagination]
+  pagerSize = 10
+
+[taxonomies]
+  tag = 'tags'
+  series = 'series'
+
+[params]
+  # === Identity ===
+  description = 'History and philosophy of science and medicine — epidemiological modelling, vaccine policy and health surveillance, from MORU in Bangkok.'
+  author = 'Vidhyakorn Mahd-Adam'
+  tagline = '// History & Philosophy of Science and Medicine'
+  bio = 'Researcher at MORU, Bangkok. Epidemiological modelling, vaccine policy, and the populations standard surveillance cannot see.'
+  avatar = '/img/profile.jpg'
+  # Banner background image. Left unset, the theme draws its own gradient.
+  # banner = '/img/banner.webp'
+
+  # === Banner Text ===
+  bannerTitle = 'History & Philosophy of'
+  bannerHighlight = 'Science and Medicine'
+  bannerSubtitle = '// epidemiology · health policy · surveillance'
+
+  # === Content Limits ===
+  homepagePostsLimit = 10
+  cardSummaryLength = 150
+  relatedPostsLimit = 3
+  cardImageQuality = 80
+  coverImageQuality = 85
+
+  # === Feature Toggles ===
+  enableLoadingAnimation = true
+  enableMouseGlow = true
+  showBanner = true
+  showReadingProgress = true
+  enableLightbox = true
+  showScrollTop = true
+  enableSearch = true
+  showRelatedPosts = true
+  showSeriesNav = true
+  enableCodeCopy = true
+  enableScrollAnimation = true
+
+  # === Share ===
+  sharePlatforms = ['twitter', 'linkedin']
+
+  # === Academic profiles ===
+  # TODO: paste your URLs and uncomment. LinkedIn has a built-in icon;
+  # ORCID and Google Scholar fall back to a generic external-link icon.
+  # [[params.social]]
+  #   name = "ORCID"
+  #   url = "https://orcid.org/0009-0008-2468-8870"
+  # [[params.social]]
+  #   name = "Google Scholar"
+  #   url = "https://scholar.google.com/citations?user=..."
+  # [[params.social]]
+  #   name = "LinkedIn"
+  #   url = "https://www.linkedin.com/in/..."
+
+  # === Style Overrides ===
+  # Uncomment to tint the theme; left off so Spectra's own palette applies.
+  # [params.style]
+  #   colorAccent = '#2c4a80'
+  #   colorAccentWarm = '#c49c42'
+  #   colorAccentSoft = '#7d94c4'
+
+  [params.sidebar]
+    showAllPosts = true
+    showCategories = true
+    showTags = true
+    showRecent = true
+    categoryLimit = 5
+    tagsLimit = 20
+    recentLimit = 5
+
+[markup]
+  [markup.highlight]
+    guessSyntax = true
+    noClasses = false
+    lineNos = false
+    lineNumbersInTable = true
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
+  [markup.goldmark.renderer]
+    unsafe = true
+  [markup.goldmark.extensions.passthrough]
+    enable = true
+    [markup.goldmark.extensions.passthrough.delimiters]
+      block = [['$$', '$$']]
+      inline = [['$', '$']]
+
+[[menu.main]]
+  name = "Home"
+  pageRef = "/"
+  weight = 1
+  pre = "⌂"
+[[menu.main]]
+  name = "Writing"
+  pageRef = "/posts"
+  weight = 2
+  pre = "✎"
+[[menu.main]]
+  name = "About"
+  pageRef = "/about"
+  weight = 3
+  pre = "◉"
+
+[related]
+  includeNewer = true
+  threshold = 50
+  toLower = true
+  [[related.indices]]
+    name = "tags"
+    weight = 80
+  [[related.indices]]
+    name = "date"
+    weight = 10
+    pattern = "2006"
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'

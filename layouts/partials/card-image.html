@@ -1,0 +1,22 @@
+{{/* card-image.html — work out which image a post should show.
+     Order of preference:
+       1. cover      — a page resource or a path under static/ (e.g. /img/foo.jpg)
+       2. cover      — a full image URL (https://…/foo.jpg)
+       3. image      — same, an alias so either key works
+       4. link       — an external article; its og:image is fetched at build time
+     Returns "" when nothing is available, and the caller draws a fallback tile. */}}
+{{- $page := . -}}
+{{- $src := "" -}}
+{{- with $page.Params.cover }}{{ $src = . }}{{ end -}}
+{{- if not $src }}{{ with $page.Params.image }}{{ $src = . }}{{ end }}{{ end -}}
+{{- if not $src }}{{ with $page.Params.thumbnail }}{{ $src = . }}{{ end }}{{ end -}}
+{{- if not $src -}}
+  {{- $link := "" -}}
+  {{- with $page.Params.link }}{{ $link = . }}{{ end -}}
+  {{- if not $link }}{{ with $page.Params.external }}{{ $link = . }}{{ end }}{{ end -}}
+  {{- if not $link }}{{ with $page.Params.source_url }}{{ $link = . }}{{ end }}{{ end -}}
+  {{- with $link -}}
+    {{- $src = partialCached "og-image.html" . . -}}
+  {{- end -}}
+{{- end -}}
+{{- return $src -}}

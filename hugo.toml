@@ -9,6 +9,10 @@ defaultContentLanguageInSubdir = false
 title = 'VMA'
 theme = 'hugo-theme-spectra'
 
+# Obsidian note templates live in content/_templates/ so they are visible
+# in the vault, but they are not pages and must never be published.
+ignoreFiles = ['content/_templates/.*']
+
 [outputs]
   home = ['HTML', 'RSS', 'JSON']
 
@@ -24,7 +28,7 @@ theme = 'hugo-theme-spectra'
   description = 'Vidhyakorn Mahd-Adam — epidemiological modelling, vaccine policy and health surveillance, from MORU in Bangkok.'
   author = 'VMA'
   tagline = 'History & Philosophy of Science and Medicine'
-  bio = 'Research Assisatnt at MORU, Bangkok.'
+  bio = 'Research Assistant at MORU, Bangkok.'
   avatar = '/img/profile.jpg'
   # Banner background image. Left unset, the theme draws its own gradient.
   # banner = '/img/banner.webp'
@@ -32,7 +36,7 @@ theme = 'hugo-theme-spectra'
   # === Banner Text ===
   bannerTitle = 'Vidhyakorn Mahd-Adam'
   bannerHighlight = ' '
-  bannerSubtitle = 'sciencentific approach as an application using history and philosiphy of scince and medicine'
+  bannerSubtitle = 'A scientific approach applied through the history and philosophy of science and medicine'
 
   # === Content Limits ===
   homepagePostsLimit = 10
@@ -53,6 +57,9 @@ theme = 'hugo-theme-spectra'
   showSeriesNav = true
   enableCodeCopy = true
   enableScrollAnimation = true
+
+  # === Fonts (this REPLACES the theme's whole Google Fonts URL) ===
+  googleFontsURL = 'https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap'
 
   # === Your own CSS/JS (loaded after the theme, so it overrides) ===
   customCSS = ['css/custom.css']
@@ -75,11 +82,15 @@ theme = 'hugo-theme-spectra'
   url = "https://www.linkedin.com/in/vidhyakorn"
 
   # === Style Overrides ===
-  # Uncomment to tint the theme; left off so Spectra's own palette applies.
- [params.style]
- colorAccent = '#369d00'
- colorAccentWarm = '#003463'
- colorAccentSoft = '#eeeeee'
+  [params.style]
+    fontDisplay = "'IM Fell English', Georgia, 'Times New Roman', serif"
+    fontBody = "'EB Garamond', Georgia, 'Times New Roman', serif"
+    fontMono = "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace"
+    colorAccent = '#1F4FC4'
+    colorAccentWarm = '#C81F2B'
+    colorAccentSoft = '#FDCA40'
+    bannerImageText = '#E6E8E6'
+    bannerImageGradient = 'linear-gradient(135deg, #3772FF 0%, #DF2935 100%)'
 
   [params.sidebar]
     showAllPosts = true
@@ -113,15 +124,20 @@ theme = 'hugo-theme-spectra'
   weight = 1
   pre = "⌂"
 [[menu.main]]
+  name = "About"
+  pageRef = "/about"
+  weight = 3
+  pre = "◉"
+[[menu.main]]
   name = "Writing"
   pageRef = "/posts"
   weight = 2
   pre = "✎"
 [[menu.main]]
-  name = "About"
-  pageRef = "/about"
-  weight = 3
-  pre = "◉"
+  name = "Publications"
+  pageRef = "/posts"
+  weight = 2
+  pre = "✎"
 
 [related]
   includeNewer = true

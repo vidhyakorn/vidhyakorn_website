@@ -40,3 +40,264 @@
   max-width: 180px;
 }
 */
+
+/* --- Embedded CV --------------------------------------------------------- */
+.cv-embed {
+  margin: 2rem 0;
+  border: 1px solid var(--border-color, rgba(128, 128, 128, 0.25));
+  border-radius: 12px;
+  overflow: hidden;
+}
+.cv-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-secondary, rgba(128, 128, 128, 0.08));
+  border-bottom: 1px solid var(--border-color, rgba(128, 128, 128, 0.25));
+}
+.cv-title { font-weight: 600; }
+.cv-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.cv-btn {
+  display: inline-block;
+  padding: 7px 14px;
+  border: 1px solid var(--color-accent, #4a7de0);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  text-decoration: none;
+  color: var(--color-accent, #4a7de0);
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.cv-btn:hover { background: var(--color-accent, #4a7de0); color: #fff; }
+.cv-btn-primary { background: var(--color-accent, #4a7de0); color: #fff; }
+.cv-btn-primary:hover { filter: brightness(1.1); color: #fff; }
+.cv-frame { display: block; width: 100%; border: 0; }
+.cv-fallback, .cv-missing { padding: 20px; margin: 0; }
+.cv-mobile-note { display: none; padding: 16px; margin: 0; }
+
+/* Phones and small tablets won't render an inline PDF reliably (iOS in
+   particular), so show a link instead of an empty box. */
+@media (max-width: 700px) {
+  .cv-frame { display: none; }
+  .cv-mobile-note { display: block; }
+}
+
+/* ===========================================================================
+   "Azure Skies" palette
+   Black #080708 · Digital Blue #3772FF · Scarlet Rush #DF2935
+   Golden Pollen #FDCA40 · Alabaster Grey #E6E8E6
+
+   Three of the five fail WCAG AA as body text, so hues are kept but values
+   shifted where text sits on them. Measured ratios are noted per line.
+   =========================================================================== */
+
+:root {
+  /* surfaces */
+  --bg-primary: #E6E8E6;          /* Alabaster Grey */
+  --bg-surface: #FFFFFF;
+  --bg-sidebar: #EDEEED;
+  --bg-code: #F2F3F2;
+  --bg-code-header: #E4E6E4;
+
+  /* text — Black on Alabaster is 16.3:1 */
+  --text-primary: #080708;
+  --text-secondary: #3F4240;
+
+  /* accents: Digital Blue is only 3.4:1 on Alabaster, so link text uses a
+     darkened version of the same hue (5.7:1). Scarlet likewise: 3.8 -> 4.6. */
+  --accent: #1F4FC4;
+  --accent-warm: #C81F2B;
+  --accent-soft: #FDCA40;          /* 1.2:1 — decorative fills only, never text */
+
+  --accent-glow: rgba(55, 114, 255, 0.12);
+  --accent-warm-glow: rgba(223, 41, 53, 0.10);
+  --border: rgba(8, 7, 8, 0.14);
+  --border-warm: rgba(223, 41, 53, 0.18);
+  --grid-color: rgba(8, 7, 8, 0.05);
+  --corner-bracket: rgba(55, 114, 255, 0.45);
+  --selection-bg: rgba(253, 202, 64, 0.45);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #080708;          /* Black */
+  --bg-surface: #121312;
+  --bg-sidebar: #0C0D0C;
+  --bg-code: #131413;
+  --bg-code-header: #1A1B1A;
+
+  --text-primary: #E6E8E6;        /* 16.3:1 on Black */
+  --text-secondary: #B7BBB7;
+
+  /* On black the pure blue is only 4.8:1 and scarlet 4.3:1, so both are
+     lifted. Golden Pollen is excellent here at 13.1:1. */
+  --accent: #5B8CFF;
+  --accent-warm: #F0555F;
+  --accent-soft: #FDCA40;
+
+  --accent-glow: rgba(91, 140, 255, 0.16);
+  --accent-warm-glow: rgba(240, 85, 95, 0.12);
+  --border: rgba(230, 232, 230, 0.14);
+  --border-warm: rgba(240, 85, 95, 0.20);
+  --grid-color: rgba(230, 232, 230, 0.05);
+  --corner-bracket: rgba(91, 140, 255, 0.45);
+  --selection-bg: rgba(253, 202, 64, 0.35);
+}
+
+/* --- Type ------------------------------------------------------------------
+   IM Fell English ships regular and italic only. Asking for 600 makes the
+   browser fake a bold, which smears a face this delicate — so headings are
+   set at 400 and rely on size for hierarchy. */
+h1, h2, h3, h4, h5, h6,
+.article-header h1,
+.post-card-title,
+.banner-title {
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+
+/* EB Garamond has a small x-height and sets noticeably smaller than a
+   sans at the same pixel size, so the reading column is nudged up. */
+.article-content {
+  font-size: 1.12rem;
+  line-height: 1.7;
+}
+
+/* ===========================================================================
+   Type corrections for IM Fell English / EB Garamond
+   ---------------------------------------------------------------------------
+   The theme sets headings at 600–700. Neither face ships a bold, so the browser
+   synthesises one, which thickens and blurs these delicate old-style letters.
+   These rules match the theme's own specificity so 400 actually wins.
+   =========================================================================== */
+.single-layout > .article-content h2,
+.single-layout > .article-content h3,
+.single-layout > .article-content h4,
+.single-layout > .article-content h5,
+.single-layout > .article-content h6,
+.article-header h1,
+.banner-content h1,
+.post-card h3,
+.post-card h3 a,
+.section-label,
+.sidebar h3 {
+  font-weight: 400;
+}
+
+/* EB Garamond has a small x-height, so 1rem reads noticeably smaller than the
+   sans it replaces. The reading column is nudged up to compensate. */
+.single-layout > .article-content p,
+.single-layout > .article-content ul,
+.single-layout > .article-content ol {
+  font-size: 1.06rem;
+  line-height: 1.72;
+}
+
+/* ===========================================================================
+   Tightened spacing (desktop only — the theme already compacts below 900px)
+   =========================================================================== */
+@media (min-width: 901px) {
+  .main-content {
+    padding: 2rem 1.75rem;
+  }
+
+  .post-card {
+    margin-bottom: 1.1rem;
+  }
+
+  .post-card-body {
+    padding: 1.4rem 1.7rem;
+  }
+  .post-card-body::before {
+    top: 1.4rem;
+    right: 1.7rem;
+  }
+
+  .post-card h3 {
+    margin-bottom: 0.45rem;
+  }
+  .post-card p {
+    margin-bottom: 0.8rem;
+  }
+  .post-card-meta {
+    margin-bottom: 0.5rem;
+  }
+
+  .post-card-cover {
+    min-height: 152px;
+  }
+
+  .single-layout > .article-content h2,
+  .single-layout > .article-content h3,
+  .single-layout > .article-content h4,
+  .single-layout > .article-content h5,
+  .single-layout > .article-content h6 {
+    margin-block: 1.6rem 0.55rem;
+  }
+
+  .single-layout > .article-content p,
+  .single-layout > .article-content ul,
+  .single-layout > .article-content ol {
+    margin-block: 0 0.85rem;
+  }
+}
+
+/* ===========================================================================
+   Fallback card tile — drawn when a post has no image of its own and no
+   external link to borrow one from, so the card grid stays even.
+   =========================================================================== */
+.post-card-cover--blank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255, 255, 255, 0.05) 0 8px,
+      transparent 8px 16px),
+    linear-gradient(135deg, var(--tile-a), var(--tile-b));
+  --tile-a: #1F4FC4;
+  --tile-b: #3772FF;
+}
+.post-card-cover--blank[data-variant="1"] { --tile-a: #3772FF; --tile-b: #C81F2B; }
+.post-card-cover--blank[data-variant="2"] { --tile-a: #C81F2B; --tile-b: #FDCA40; }
+.post-card-cover--blank[data-variant="3"] { --tile-a: #080708; --tile-b: #1F4FC4; }
+.post-card-cover--blank[data-variant="4"] { --tile-a: #FDCA40; --tile-b: #3772FF; }
+
+.post-card-cover--blank span {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  line-height: 1;
+  color: #E6E8E6;
+  opacity: 0.82;
+  text-shadow: 0 1px 2px rgba(8, 7, 8, 0.35);
+  user-select: none;
+}
+
+/* The banner is 55vh by default, which on a laptop is most of the first
+   screen before a single post title appears. Shorter, so the writing starts
+   above the fold. */
+@media (min-width: 901px) {
+  .banner {
+    height: 34vh;
+    min-height: 220px;
+  }
+  .banner + .main-content {
+    margin-top: -80px;
+  }
+}
+
+/* Article body: 48px of padding on every side is generous for a reading
+   column this narrow. */
+@media (min-width: 901px) {
+  .article-content {
+    padding: 2rem 2.25rem;
+  }
+  .related-posts,
+  .series-nav,
+  .share-buttons {
+    margin-block: 1.4rem;
+  }
+}

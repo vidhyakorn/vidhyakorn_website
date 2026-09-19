@@ -1,0 +1,45 @@
+{{/* og-image.html — given a page URL, return the og:image / twitter:image URL
+     found in that page's <head>, or "" if the page can't be fetched or has none.
+     Always fails soft: a dead link must never break the build. */}}
+{{- $url := . -}}
+{{- $out := "" -}}
+{{- if and $url (or (hasPrefix $url "http://") (hasPrefix $url "https://")) -}}
+  {{- $opts := dict "headers" (dict "User-Agent" "Mozilla/5.0 (compatible; Hugo static site build)") -}}
+  {{- with try (resources.GetRemote $url $opts) -}}
+    {{- with .Err -}}
+      {{- warnf "og-image: could not fetch %q (%s)" $url . -}}
+    {{- else -}}
+      {{- with .Value -}}
+        {{- $html := .Content | string -}}
+        {{- /* Only look at the head; og tags live there and it keeps the regex cheap. */ -}}
+        {{- $head := $html -}}
+        {{- with findRE `(?s)<head[^>]*>.*?</head>` $html 1 -}}
+          {{- $head = index . 0 -}}
+        {{- end -}}
+        {{- range $prop := slice "og:image:secure_url" "og:image" "twitter:image" "twitter:image:src" -}}
+          {{- if not $out -}}
+            {{- $re := printf `<meta[^>]+(?:property|name)=["']%s["'][^>]*>` $prop -}}
+            {{- with findRE $re $head 1 -}}
+              {{- with findRE `content=["']([^"']+)["']` (index . 0) 1 -}}
+                {{- $raw := index . 0 -}}
+                {{- $raw = replaceRE `^content=["']` "" $raw -}}
+                {{- $raw = replaceRE `["']$` "" $raw -}}
+                {{- $out = $raw -}}
+              {{- end -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+        {{- /* Resolve protocol-relative and root-relative URLs against the source site. */ -}}
+        {{- if hasPrefix $out "//" -}}
+          {{- $out = printf "https:%s" $out -}}
+        {{- else if hasPrefix $out "/" -}}
+          {{- $u := urls.Parse $url -}}
+          {{- $out = printf "%s://%s%s" $u.Scheme $u.Host $out -}}
+        {{- else if and $out (not (hasPrefix $out "http")) -}}
+          {{- $out = "" -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

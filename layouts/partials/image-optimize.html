@@ -1,0 +1,45 @@
+{{/* image-optimize (project override) — same contract as the theme's partial,
+     plus support for a remote image URL. A remote image is downloaded once at
+     build time and then resized exactly like a local one, so cards stay fast
+     and the site never hot-links. A failed download degrades to nothing rather
+     than breaking the build. */}}
+{{- $page := .page -}}
+{{- $src := .src -}}
+{{- $alt := .alt | default "" -}}
+{{- $img := "" -}}
+
+{{- if or (hasPrefix $src "http://") (hasPrefix $src "https://") -}}
+  {{- $opts := dict "headers" (dict "User-Agent" "Mozilla/5.0 (compatible; Hugo static site build)") -}}
+  {{- with try (resources.GetRemote $src $opts) -}}
+    {{- with .Err -}}
+      {{- warnf "image-optimize: could not fetch %q (%s)" $src . -}}
+    {{- else -}}
+      {{- with .Value -}}
+        {{- if eq .MediaType.MainType "image" -}}{{ $img = . }}{{ end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- else -}}
+  {{- with $page.Resources.GetMatch $src }}{{ $img = . }}{{ end -}}
+  {{- if not $img -}}
+    {{- with resources.Get ($src | strings.TrimPrefix "/") }}{{ $img = . }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if $img -}}
+  {{- if .fill -}}
+    {{- with try ($img.Fill .fill) -}}
+      {{- with .Err -}}{{ warnf "image-optimize: could not resize %q (%s)" $src . }}
+      {{- else -}}{{ with .Value }}<img src="{{ .RelPermalink }}" alt="{{ $alt }}" width="{{ .Width }}" height="{{ .Height }}" loading="lazy" decoding="async">{{ end }}{{- end -}}
+    {{- end -}}
+  {{- else if .process -}}
+    {{- with try ($img.Process .process) -}}
+      {{- with .Err -}}{{ warnf "image-optimize: could not process %q (%s)" $src . }}
+      {{- else -}}{{ with .Value }}<img src="{{ .RelPermalink }}" alt="{{ $alt }}" width="{{ .Width }}" height="{{ .Height }}" loading="lazy" decoding="async">{{ end }}{{- end -}}
+    {{- end -}}
+  {{- else -}}
+    <img src="{{ $img.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+  {{- end -}}
+{{- else if not (or (hasPrefix $src "http://") (hasPrefix $src "https://")) -}}
+  <img src="{{ $src | strings.TrimPrefix "/" | relURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+{{- end -}}

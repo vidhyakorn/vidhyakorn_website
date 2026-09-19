@@ -21,6 +21,10 @@ I am deeply interested in the History and Philosophy of Science and Medicine. I 
 - **Location** — Bangkok, Thailand
 - **Focus** —   - Computational Methods Population · Dynamic ·  Capabilities Approach ·  Bio-psychosocial Model ·  Neurodiversity ·  Social Deviant & -Others ·  Social Theories of Health and Diseases
 
+## Curriculum vitae
+
+{{< cv src="/cv/vidhyakorn-cv.pdf" title="Curriculum Vitae" height="1000" >}}
+
 ## Connect
 
 - GitHub: [github.com/vidhyakorn](https://github.com/vidhyakorn)

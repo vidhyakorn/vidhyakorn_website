@@ -5,15 +5,17 @@ draft: false
 tags:
   - hanami
 description: what we learn from hanami
-cover: '"/img/hanami2026_image.png"'
+cover: "/img/hanami2026-img.png"
 link: ""
 toc: true
 math: true
 ---
 
 
-
-![Capability approach in practice](static/img/hanami2026_image.png)
+{{< figure src="/img/hanami2026-img.png"
+           alt="Compartments and the flows between them"
+           caption="**Figure 1.** Structure of the model."
+           width="520" >}}
 
 
 > I wrote this article to recognize October as ADHD and Neurodiversity Awareness Month, inspired by the recent conversations surrounding UK Channel 4’s documentary, ‘_The Great Myth of ADHD’_. A special thank you to Assoc. Prof. Wirichada Pan-ngum (Pan) and the whole MAEMOD squad for their ongoing support, as well as the EDI committee for their official endorsement.

@@ -41,5 +41,14 @@
     <img src="{{ $img.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async">
   {{- end -}}
 {{- else if not (or (hasPrefix $src "http://") (hasPrefix $src "https://")) -}}
-  <img src="{{ $src | strings.TrimPrefix "/" | relURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+  {{- /* Not a resource Hugo knows about. If the file really is in static/,
+         serve it; if it isn't, emit nothing so the caller can fall back to a
+         tile rather than showing a broken-image icon. A mistyped or renamed
+         path is the usual cause. */ -}}
+  {{- $rel := $src | strings.TrimPrefix "/" -}}
+  {{- if os.FileExists (printf "static/%s" $rel) -}}
+    <img src="{{ $rel | relURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+  {{- else -}}
+    {{- warnf "image: %q was not found in static/ or assets/ — check the path" $src -}}
+  {{- end -}}
 {{- end -}}

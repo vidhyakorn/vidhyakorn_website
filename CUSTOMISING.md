@@ -242,6 +242,61 @@ First one filled in wins:
 4. Nothing — a patterned tile with the title's first letter, the pattern chosen
    from the title so it never changes.
 
+### Putting a diagram in the text
+
+**The simple way.** Save the file in `static\img\`, then in the post write:
+
+```markdown
+![What the diagram shows](/img/model-structure.png)
+```
+
+The path starts at `/img/`, never `/static/img/` — `static` is the folder Hugo
+copies *from*, so it disappears from the address. The text in the brackets is
+what a screen reader announces and what shows if the image fails to load; it is
+worth writing properly.
+
+That stretches the picture to the full width of the column, which is right for a
+screenshot and usually too big for a diagram. To size it, add a caption, or
+wrap text around it, use the figure shortcode instead:
+
+```markdown
+{{< figure src="/img/model-structure.png"
+           alt="Compartments and the flows between them"
+           caption="**Figure 1.** Structure of the model."
+           width="520" >}}
+```
+
+- `width` is in pixels and caps the picture; leave it out for full width.
+- `caption` accepts markdown, so `**Figure 1.**` comes out bold.
+- `align="left"` or `align="right"` floats it and lets the text wrap around;
+  the default is centred. On a phone it always goes full width.
+
+Readers can click any picture in an article to see it full size.
+
+**Pasting straight from Obsidian.** Turn the post into a *folder* instead of a
+single file — `hanami2026.md` becomes `hanami2026\index.md`. Images can then
+sit in that folder beside the post and you refer to them by name alone:
+
+```markdown
+![Model structure](diagram.png)
+
+{{< figure src="diagram.png" caption="Figure 1." width="520" >}}
+```
+
+This is what makes pasting work. Obsidian is already set to save attachments
+next to the note, so a pasted screenshot lands in the right folder on its own.
+One setting is worth changing: **Settings → Files & Links → New link format →
+Relative to note**. Without it Obsidian writes a long path from the vault root,
+which Hugo cannot follow.
+
+Keeping each post in its own folder also keeps its pictures with it — move or
+delete the post and the images go too.
+
+**Two things that will not work.** Obsidian's own embed syntax, `![[file.png]]`,
+is not markdown and Hugo ignores it; use `![](file.png)`. And an image simply
+dropped next to an ordinary `.md` post — one that is not a folder with
+`index.md` — is not published at all, so the picture comes out broken.
+
 ### Publications — no typing
 
 Put the DOI in the front matter and leave the rest out:

@@ -5,16 +5,15 @@ draft: false
 tags:
   - hanami
 description: what we learn from hanami
-cover: '"hanami2026_image"'
+cover: '"/img/hanami2026_image.png"'
 link: ""
 toc: true
 math: true
 ---
 
-# **‘Hanami’: A ‘Cherry Blossom Viewing’; What the Science of Spring Can Teach Us About Human Flourishing**
 
 
-![Alt text](hanami2026_image.png)
+![Capability approach in practice](static/img/hanami2026_image.png)
 
 
 > I wrote this article to recognize October as ADHD and Neurodiversity Awareness Month, inspired by the recent conversations surrounding UK Channel 4’s documentary, ‘_The Great Myth of ADHD’_. A special thank you to Assoc. Prof. Wirichada Pan-ngum (Pan) and the whole MAEMOD squad for their ongoing support, as well as the EDI committee for their official endorsement.

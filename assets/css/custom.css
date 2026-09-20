@@ -442,3 +442,48 @@ h1, h2, h3, h4, h5, h6,
   .cv-frame { display: none; }
   .cv-mobile-note { display: block; }
 }
+
+/* ===========================================================================
+   FIGURES
+   The theme stretches every figure to the full column width. A diagram is
+   usually better smaller, so the width given to the shortcode caps it and the
+   figure stays centred; align="left"/"right" floats it instead.
+   =========================================================================== */
+.figure-block {
+  margin-inline: auto;
+}
+.figure-block figcaption {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin-top: 0.6rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 701px) {
+  .figure-left,
+  .figure-right {
+    max-width: 45%;
+    margin-block: 0.4rem 1rem;
+  }
+  .figure-left {
+    float: left;
+    margin-right: 1.6rem;
+  }
+  .figure-right {
+    float: right;
+    margin-left: 1.6rem;
+  }
+}
+
+/* Images dropped straight into the text with ![](…) are capped too, so an
+   oversized screenshot can't blow out the reading column. */
+.article-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Clicking any image in an article opens it full size (enableLightbox), so
+   show a cursor that says as much. */
+.article-content img[data-lightbox] {
+  cursor: zoom-in;
+}

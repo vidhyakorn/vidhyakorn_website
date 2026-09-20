@@ -1,0 +1,48 @@
+{{/* figure (project override)
+
+     {{< figure src="/img/model.png" alt="Model structure"
+                caption="Figure 1. Structure of the model." width="520" >}}
+
+     src   — a file in static/img/ written as /img/name.png, a file sitting
+             beside the post when the post is a folder with index.md, or a full
+             https:// URL.
+     alt   — what the picture shows, for screen readers and for when it fails
+             to load. Always worth writing.
+     caption — optional; markdown is allowed inside it.
+     width — optional, in pixels. The theme stretches every figure to the full
+             column, which is too big for most diagrams; this caps it.
+     align — "center" (default), "left" or "right" to wrap text around it.
+
+     Differs from the theme's version in resolving images that live beside the
+     post, and in honouring width. */}}
+
+{{- $src := .Get "src" -}}
+{{- with $src -}}
+  {{- $url := "" -}}
+  {{- /* 1. beside the post (a page bundle) */ -}}
+  {{- with $.Page.Resources.GetMatch $src }}{{ $url = .RelPermalink }}{{ end -}}
+  {{- /* 2. in assets/ */ -}}
+  {{- if not $url }}{{ with resources.Get ($src | strings.TrimPrefix "/") }}{{ $url = .RelPermalink }}{{ end }}{{ end -}}
+  {{- /* 3. a full URL, or a path under static/ */ -}}
+  {{- if not $url -}}
+    {{- if or (hasPrefix $src "http://") (hasPrefix $src "https://") (hasPrefix $src "//") -}}
+      {{- $url = $src -}}
+    {{- else -}}
+      {{- $url = $src | strings.TrimPrefix "/" | relURL -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $align := $.Get "align" | default "center" -}}
+  {{- $w := $.Get "width" -}}
+<figure class="figure-block figure-{{ $align }}"{{ with $w }} style="max-width:{{ . }}px"{{ end }}>
+  <div class="figure-image">
+    <img src="{{ $url }}"
+      {{ with $.Get "alt" }}alt="{{ . }}"{{ else }}alt=""{{ end }}
+      {{ with $.Get "height" }}height="{{ . }}"{{ end }}
+      loading="lazy" decoding="async">
+  </div>
+  {{ with $.Get "caption" }}<figcaption>{{ . | markdownify }}</figcaption>{{ end }}
+</figure>
+{{- else -}}
+  {{- errorf "figure shortcode needs a src, e.g. {{< figure src=\"/img/diagram.png\" >}} — %s" .Position -}}
+{{- end -}}

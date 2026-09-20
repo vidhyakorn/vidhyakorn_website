@@ -11,3 +11,6 @@ desktop.ini
 # Obsidian vault settings — local to your machine, not part of the site
 .obsidian/
 .trash/
+
+# Editor and script backups
+*.bak

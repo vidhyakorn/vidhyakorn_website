@@ -11,20 +11,19 @@
   {{- with trim (string $cover) " \n\t\r" -}}
     {{- . | safeHTML -}}
   {{- else -}}
-    {{- $seed := hash.FNV32a (printf "%s%s" $.Title $.RelPermalink) -}}
-    <div class="post-card-cover post-card-cover--blank" data-variant="{{ mod $seed 5 }}" aria-hidden="true"><span>{{ substr (or $.Title "·") 0 1 }}</span></div>
+    {{- $t := partial "pub-title.html" $ -}}
+    {{- $seed := hash.FNV32a (printf "%s%s" $t $.RelPermalink) -}}
+    <div class="post-card-cover post-card-cover--blank" data-variant="{{ mod $seed 5 }}" aria-hidden="true"><span>{{ substr (or $t "·") 0 1 }}</span></div>
   {{- end -}}
   <div class="post-card-body">
     <div class="post-card-meta">
       {{ with .Date }}<span>{{ .Format "2006-01-02" }}</span>{{ end }}
       <span>{{ .ReadingTime }} {{ i18n "min_read" }}</span>
     </div>
-    <h3><a href="{{ .RelPermalink }}">{{ or .Title "(Untitled)" }}</a></h3>
-    {{ with .Description }}
+    <h3><a href="{{ .RelPermalink }}">{{ or (partial "pub-title.html" .) "(Untitled)" }}</a></h3>
+    {{ with partial "pub-summary.html" . }}
     <p>{{ . }}</p>
-    {{ else }}{{ with .Summary }}
-    <p>{{ . | plainify | truncate (site.Params.cardSummaryLength | default 150) }}</p>
-    {{ end }}{{ end }}
+    {{ end }}
     {{- partial "tag-list" (dict "page" .) -}}
   </div>
 </article>

@@ -1,0 +1,24 @@
+{{/* meta-all.html — return every <meta> content in `head` matching the first
+     of `names` that appears at all. Used for repeated citation_author tags. */}}
+{{- $head := .head -}}
+{{- $out := slice -}}
+{{- range $n := .names -}}
+  {{- if eq (len $out) 0 -}}
+    {{- $re := printf `<meta[^>]+(?:name|property)=["']%s["'][^>]*>` ($n | replaceRE `\.` `\.`) -}}
+    {{- range findRE $re $head 20 -}}
+      {{- with findRE `content=["']([^"']*)["']` . 1 -}}
+        {{- $raw := index . 0 | replaceRE `^content=["']` "" | replaceRE `["']$` "" -}}
+        {{- $v := $raw | plainify | htmlUnescape | strings.TrimSpace -}}
+        {{- /* Scholar writes "Family, Given" — flip it back. */ -}}
+        {{- if strings.Contains $v "," -}}
+          {{- $parts := split $v "," -}}
+          {{- if eq (len $parts) 2 -}}
+            {{- $v = printf "%s %s" (strings.TrimSpace (index $parts 1)) (strings.TrimSpace (index $parts 0)) -}}
+          {{- end -}}
+        {{- end -}}
+        {{- with $v }}{{ $out = $out | append . }}{{ end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

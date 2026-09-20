@@ -1,0 +1,179 @@
+{{/* paper-meta.html — look up a publication's details so they never have to be
+     typed in by hand.
+
+     Give a post any one of these in its front matter:
+       doi:    "10.1186/s12889-025-25811-5"
+       source: "https://doi.org/10.1186/..."   (a DOI anywhere in the URL works)
+       source: "https://any-journal.org/article/123"   (no DOI — meta tags)
+       link:   same as source
+
+     A DOI is asked of Crossref first (journals) and then DataCite (figshare,
+     Zenodo, data repositories). A plain URL has its citation_* / Dublin Core /
+     og: meta tags read instead.
+
+     Returns a dict: ok, title, authors (slice), journal, year, abstract,
+     url, doi, publisher. Every lookup is wrapped so a dead link, a rate limit
+     or an offline build degrades to ok=false instead of failing the build.
+
+     Anything written in the front matter always wins over what is fetched —
+     this only fills the gaps. */}}
+
+{{- $page := . -}}
+{{- $out := dict "ok" false "title" "" "authors" slice "journal" "" "year" "" "abstract" "" "url" "" "doi" "" "publisher" "" -}}
+
+{{- /* 1. Work out what we were given. */ -}}
+{{- $src := "" -}}
+{{- with $page.Params.source }}{{ $src = . }}{{ end -}}
+{{- if not $src }}{{ with $page.Params.link }}{{ $src = . }}{{ end }}{{ end -}}
+{{- if not $src }}{{ with $page.Params.external }}{{ $src = . }}{{ end }}{{ end -}}
+{{- /* Front matter written in Obsidian sometimes arrives wrapped in stray
+       quotes; strip them rather than making the user notice. */ -}}
+{{- $src = $src | replaceRE `^['"]+` "" | replaceRE `['"]+$` "" -}}
+
+{{- $doi := "" -}}
+{{- with $page.Params.doi }}{{ $doi = . }}{{ end -}}
+{{- if not $doi -}}
+  {{- with findRE `10\.\d{4,9}/[^\s"'<>&?#]+` $src 1 -}}
+    {{- $doi = index . 0 -}}
+  {{- end -}}
+{{- end -}}
+{{- $doi = $doi | strings.TrimSuffix "." | strings.TrimSuffix "/" -}}
+
+{{- $opts := dict "headers" (dict "User-Agent" "Mozilla/5.0 (compatible; Hugo static site build)") -}}
+
+{{- /* 2. A DOI: ask Crossref, then DataCite. */ -}}
+{{- if $doi -}}
+  {{- $mail := site.Params.crossrefMailto | default "" -}}
+  {{- $api := printf "https://api.crossref.org/works/%s" $doi -}}
+  {{- with $mail }}{{ $api = printf "%s?mailto=%s" $api . }}{{ end -}}
+
+  {{- with try (resources.GetRemote $api $opts) -}}
+    {{- with .Err -}}
+      {{- warnf "paper-meta: Crossref lookup failed for %s (%s)" $doi . -}}
+    {{- else -}}
+      {{- with .Value -}}
+        {{- with try (unmarshal .Content) -}}
+          {{- with .Value -}}
+            {{- with .message -}}
+              {{- $m := . -}}
+              {{- $t := "" -}}
+              {{- with $m.title }}{{ if reflect.IsSlice . }}{{ if gt (len .) 0 }}{{ $t = index . 0 }}{{ end }}{{ else }}{{ $t = . }}{{ end }}{{ end -}}
+              {{- $j := "" -}}
+              {{- $ct := index $m "container-title" -}}
+              {{- with $ct }}{{ if reflect.IsSlice . }}{{ if gt (len .) 0 }}{{ $j = index . 0 }}{{ end }}{{ else }}{{ $j = . }}{{ end }}{{ end -}}
+              {{- $names := slice -}}
+              {{- range $m.author -}}
+                {{- $n := "" -}}
+                {{- if and .given .family -}}
+                  {{- $n = printf "%s %s" .given .family -}}
+                {{- else -}}
+                  {{- with .family }}{{ $n = . }}{{ end -}}
+                  {{- if not $n }}{{ with .name }}{{ $n = . }}{{ end }}{{ end -}}
+                {{- end -}}
+                {{- with $n }}{{ $names = $names | append . }}{{ end -}}
+              {{- end -}}
+              {{- $yr := "" -}}
+              {{- $dp := "" -}}
+              {{- with $m.published }}{{ $dp = index . "date-parts" }}{{ end -}}
+              {{- if not $dp }}{{ with $m.issued }}{{ $dp = index . "date-parts" }}{{ end }}{{ end -}}
+              {{- with $dp }}{{ if gt (len .) 0 }}{{ $first := index . 0 }}{{ if gt (len $first) 0 }}{{ $yr = printf "%v" (index $first 0) }}{{ end }}{{ end }}{{ end -}}
+              {{- $abs := "" -}}
+              {{- with $m.abstract }}{{ $abs = . | plainify | htmlUnescape | strings.TrimSpace }}{{ end -}}
+              {{- $abs = $abs | replaceRE `(?i)^abstract\s*:?\s*` "" -}}
+              {{- if $t -}}
+                {{- $out = dict "ok" true "title" ($t | plainify | htmlUnescape)
+                      "authors" $names "journal" $j "year" $yr "abstract" $abs
+                      "url" (printf "https://doi.org/%s" $doi) "doi" $doi
+                      "publisher" ($m.publisher | default "") -}}
+              {{- end -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- /* DataCite: figshare, Zenodo, OSF and other repository DOIs. */ -}}
+  {{- if not $out.ok -}}
+    {{- $dc := printf "https://api.datacite.org/dois/%s" $doi -}}
+    {{- with try (resources.GetRemote $dc $opts) -}}
+      {{- with .Err -}}
+        {{- warnf "paper-meta: DataCite lookup failed for %s (%s)" $doi . -}}
+      {{- else -}}
+        {{- with .Value -}}
+          {{- with try (unmarshal .Content) -}}
+            {{- with .Value -}}
+              {{- with .data -}}
+                {{- with .attributes -}}
+                  {{- $a := . -}}
+                  {{- $t := "" -}}
+                  {{- with $a.titles }}{{ if gt (len .) 0 }}{{ $t = (index . 0).title }}{{ end }}{{ end -}}
+                  {{- $names := slice -}}
+                  {{- range $a.creators -}}
+                    {{- $n := "" -}}
+                    {{- if and .givenName .familyName -}}
+                      {{- $n = printf "%s %s" .givenName .familyName -}}
+                    {{- else -}}
+                      {{- with .name }}{{ $n = . }}{{ end -}}
+                    {{- end -}}
+                    {{- with $n }}{{ $names = $names | append . }}{{ end -}}
+                  {{- end -}}
+                  {{- $abs := "" -}}
+                  {{- range $a.descriptions -}}
+                    {{- if not $abs }}{{ with .description }}{{ $abs = . }}{{ end }}{{ end -}}
+                  {{- end -}}
+                  {{- if $t -}}
+                    {{- $out = dict "ok" true "title" ($t | plainify | htmlUnescape)
+                          "authors" $names "journal" "" "year" (printf "%v" ($a.publicationYear | default ""))
+                          "abstract" ($abs | plainify | htmlUnescape | strings.TrimSpace)
+                          "url" ($a.url | default (printf "https://doi.org/%s" $doi)) "doi" $doi
+                          "publisher" ($a.publisher | default "") -}}
+                  {{- end -}}
+                {{- end -}}
+              {{- end -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 3. No DOI, or neither registry knew it: read the page's own meta tags.
+       Google Scholar's citation_* tags are the richest, then Dublin Core,
+       then Open Graph. */ -}}
+{{- if and (not $out.ok) (or (hasPrefix $src "http://") (hasPrefix $src "https://")) -}}
+  {{- with try (resources.GetRemote $src $opts) -}}
+    {{- with .Err -}}
+      {{- warnf "paper-meta: could not fetch %q (%s)" $src . -}}
+    {{- else -}}
+      {{- with .Value -}}
+        {{- $html := .Content | string -}}
+        {{- $head := $html -}}
+        {{- with findRE `(?s)<head[^>]*>.*?</head>` $html 1 }}{{ $head = index . 0 }}{{ end -}}
+
+        {{- $pick := partial "meta-content.html" (dict "head" $head "names" (slice "citation_title" "DC.title" "dc.title" "og:title")) -}}
+        {{- $jrnl := partial "meta-content.html" (dict "head" $head "names" (slice "citation_journal_title" "citation_conference_title" "DC.source" "og:site_name")) -}}
+        {{- $abs := partial "meta-content.html" (dict "head" $head "names" (slice "citation_abstract" "DC.description" "dc.description" "description" "og:description")) -}}
+        {{- $date := partial "meta-content.html" (dict "head" $head "names" (slice "citation_publication_date" "citation_date" "DC.date" "article:published_time")) -}}
+        {{- $yr := "" -}}
+        {{- with findRE `\d{4}` $date 1 }}{{ $yr = index . 0 }}{{ end -}}
+
+        {{- $names := partial "meta-all.html" (dict "head" $head "names" (slice "citation_author" "DC.creator" "dc.creator")) -}}
+
+        {{- if not $pick -}}
+          {{- with findRE `(?s)<title[^>]*>(.*?)</title>` $head 1 -}}
+            {{- $pick = index . 0 | plainify | htmlUnescape | strings.TrimSpace -}}
+          {{- end -}}
+        {{- end -}}
+
+        {{- if $pick -}}
+          {{- $out = dict "ok" true "title" $pick "authors" $names "journal" $jrnl
+                "year" $yr "abstract" $abs "url" $src "doi" $doi "publisher" "" -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $out -}}

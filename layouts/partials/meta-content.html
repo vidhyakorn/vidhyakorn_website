@@ -1,0 +1,16 @@
+{{/* meta-content.html — return the content of the first <meta> tag in `head`
+     whose name or property matches one of `names`, or "". */}}
+{{- $head := .head -}}
+{{- $out := "" -}}
+{{- range $n := .names -}}
+  {{- if not $out -}}
+    {{- $re := printf `<meta[^>]+(?:name|property)=["']%s["'][^>]*>` ($n | replaceRE `\.` `\.`) -}}
+    {{- with findRE $re $head 1 -}}
+      {{- with findRE `content=["']([^"']*)["']` (index . 0) 1 -}}
+        {{- $raw := index . 0 | replaceRE `^content=["']` "" | replaceRE `["']$` "" -}}
+        {{- $out = $raw | plainify | htmlUnescape | strings.TrimSpace -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

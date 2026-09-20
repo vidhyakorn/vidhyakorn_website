@@ -1,0 +1,13 @@
+{{/* pub-summary.html — the card blurb: the front matter description, then the
+     fetched abstract, then Hugo's own summary of the body. */}}
+{{- $page := . -}}
+{{- $n := site.Params.cardSummaryLength | default 150 -}}
+{{- $s := $page.Params.description | default "" -}}
+{{- if not $s -}}
+  {{- if or $page.Params.doi $page.Params.source $page.Params.link $page.Params.external -}}
+    {{- $m := partialCached "paper-meta.html" $page $page.RelPermalink -}}
+    {{- with $m.abstract }}{{ $s = . }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $s }}{{ $s = $page.Summary | plainify }}{{ end -}}
+{{- return ($s | plainify | truncate $n) -}}

@@ -1,0 +1,17 @@
+{{/* pub-title.html — the title to display for a page: whatever was written in
+     the front matter, or, when that was left out, the one fetched from the
+     source. Hugo leaves .Title empty when the front matter has none, so the
+     last resort is the filename made readable — "CBC2025" beats a blank
+     heading if a lookup ever fails. */}}
+{{- $page := . -}}
+{{- $t := $page.Params.title | default "" -}}
+{{- if not $t -}}
+  {{- if or $page.Params.doi $page.Params.source $page.Params.link $page.Params.external -}}
+    {{- $m := partialCached "paper-meta.html" $page $page.RelPermalink -}}
+    {{- with $m.title }}{{ $t = . }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $t }}{{ with $page.Title }}{{ $t = . }}{{ end }}{{ end -}}
+{{- if not $t }}{{ with $page.File }}{{ $t = .ContentBaseName }}{{ end }}{{ end -}}
+{{- if not $t }}{{ $t = "Untitled" }}{{ end -}}
+{{- return $t -}}

@@ -65,6 +65,10 @@ ignoreFiles = ['content/_templates/.*']
   customCSS = ['css/custom.css']
   # customJS  = ['js/custom.js']
 
+  # === Publication metadata lookups ===
+  # Crossref serves identified requests from a faster pool.
+  crossrefMailto = 'vidhyakornadam@gmail.com'
+
   # === Share ===
   sharePlatforms = ['bluesky', 'linkedin']
 
@@ -86,11 +90,14 @@ ignoreFiles = ['content/_templates/.*']
     fontDisplay = "'IM Fell English', Georgia, 'Times New Roman', serif"
     fontBody = "'EB Garamond', Georgia, 'Times New Roman', serif"
     fontMono = "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace"
-    colorAccent = '#1F4FC4'
-    colorAccentWarm = '#C81F2B'
-    colorAccentSoft = '#FDCA40'
-    bannerImageText = '#E6E8E6'
-    bannerImageGradient = 'linear-gradient(135deg, #3772FF 0%, #DF2935 100%)'
+    colorAccent = '#1A2CA3'
+    colorAccentWarm = '#CD071F'
+    colorAccentSoft = '#F68048'
+    bgPrimary = '#FFFFFF'
+    bgSurface = '#FFFFFF'
+    textPrimary = '#141A2E'
+    bannerImageText = '#FFFFFF'
+    bannerImageGradient = 'linear-gradient(135deg, #0D1A63 0%, #2845D6 55%, #F68048 100%)'
 
   [params.sidebar]
     showAllPosts = true

@@ -1,0 +1,32 @@
+{{/* pub-block.html — the citation panel under a publication's title. Prints
+     nothing at all unless the post named a source, a link or a DOI. */}}
+{{- $page := . -}}
+{{- $has := or $page.Params.doi $page.Params.source $page.Params.link $page.Params.external -}}
+{{- with $has -}}
+  {{- $m := partialCached "paper-meta.html" $page $page.RelPermalink -}}
+  {{- $url := or $page.Params.source $page.Params.link $page.Params.external $m.url -}}
+  {{- $url = $url | replaceRE `^['"]+` "" | replaceRE `['"]+$` "" -}}
+  {{- if $m.ok -}}
+  <div class="pub-meta">
+    {{- with $m.authors }}<p class="pub-meta-authors">{{ delimit . ", " " and " }}</p>{{ end -}}
+    <p class="pub-meta-where">
+      {{- with $m.journal }}<em>{{ . }}</em>{{ else }}{{ with $m.publisher }}{{ . }}{{ end }}{{ end -}}
+      {{- with $m.year }}{{ if or $m.journal $m.publisher }}, {{ end }}{{ . }}{{ end -}}
+      {{- with $m.doi }}<br><span class="pub-doi">doi:{{ . }}</span>{{ end -}}
+    </p>
+    <div class="pub-actions">
+      {{- with $url }}<a class="pub-btn pub-btn-primary" href="{{ . }}" target="_blank" rel="noopener">Read the paper &rarr;</a>{{ end -}}
+      {{- with $m.doi }}<a class="pub-btn" href="https://doi.org/{{ . }}" target="_blank" rel="noopener">DOI</a>{{ end -}}
+    </div>
+  </div>
+  {{- else -}}
+  {{- /* The lookup did not answer — most often the publisher blocks robots.
+         Show the link on its own rather than an apology. */ -}}
+  {{- with $url -}}
+  <div class="pub-actions pub-actions-bare">
+    <a class="pub-btn pub-btn-primary" href="{{ . }}" target="_blank" rel="noopener">Read the paper &rarr;</a>
+    {{- with $page.Params.doi }}<a class="pub-btn" href="https://doi.org/{{ . }}" target="_blank" rel="noopener">DOI</a>{{ end -}}
+  </div>
+  {{- end -}}
+  {{- end -}}
+{{- end -}}

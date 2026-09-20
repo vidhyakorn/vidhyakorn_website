@@ -1,19 +1,23 @@
 ---
-title: "Untitled"
+title: "‘Hanami’: A ‘Cherry Blossom Viewing’; What the Science of Spring Can Teach Us About Human Flourishing"
 date: 2026-09-20
-draft: true
-tags: []
-description: ""
-cover: ""
+draft: false
+tags:
+  - hanami
+description: what we learn from hanami
+cover: '"hanami2026_image"'
 link: ""
 toc: true
-math: false
+math: true
 ---
 
 # **‘Hanami’: A ‘Cherry Blossom Viewing’; What the Science of Spring Can Teach Us About Human Flourishing**
 
 
-I wrote this article to recognize October as ADHD and Neurodiversity Awareness Month, inspired by the recent conversations surrounding UK Channel 4’s documentary, ‘_The Great Myth of ADHD’_. A special thank you to Assoc. Prof. Wirichada Pan-ngum (Pan) and the whole MAEMOD squad for their ongoing support, as well as the EDI committee for their official endorsement.
+![Alt text](hanami2026_image.png)
+
+
+> I wrote this article to recognize October as ADHD and Neurodiversity Awareness Month, inspired by the recent conversations surrounding UK Channel 4’s documentary, ‘_The Great Myth of ADHD’_. A special thank you to Assoc. Prof. Wirichada Pan-ngum (Pan) and the whole MAEMOD squad for their ongoing support, as well as the EDI committee for their official endorsement.
 
 Every spring in Japan, millions gather under falling sakura petals for Hanami, a tradition of flower viewing that dates to 812 CE in Kyoto. Originally, observers practiced patience, treating the trees as ‘natural biological markers’ to guide ‘society's rhythms, such as the timing for spring rice planting. By 1955, the Japan Meteorological Agency transformed this ancient tradition into a data-driven science by monitoring 58 ideal trees across the country. Today, sophisticated biometeorological modeling tracks winter "chilling hours" and spring "growing degree-days" to forecast blooms down to the hour using satellite data and crowdsourced apps. The forecasting app and hundreds of managed subsidiaries are given to people with disabilities and elderly, to join the ‘Hanami’. Yet, the true essence of Hanami is not found in algorithmic control or digital screens, but in the lived human experience of shared appreciation, laughter, and reflection beneath the blossoming canopy.
 

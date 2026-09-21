@@ -25,18 +25,18 @@ ignoreFiles = ['content/_templates/.*']
 
 [params]
   # === Identity ===
-  description = 'Vidhyakorn Mahd-Adam — epidemiological modelling, vaccine policy and health surveillance, from MORU in Bangkok.'
-  author = 'VMA'
-  tagline = 'History & Philosophy of Science and Medicine'
+  description = 'Vidhyakorn Mahd-Adam'
+  author = 'Vidhyakorn Mahd-Adam'
+  tagline = ' in progress '
   bio = 'Research Assistant at MORU, Bangkok.'
   avatar = '/img/profile.jpg'
   # Banner background image. Left unset, the theme draws its own gradient.
   # banner = '/img/banner.webp'
 
   # === Banner Text ===
-  bannerTitle = 'Vidhyakorn Mahd-Adam'
+  bannerTitle = 'τὸ τέλος τοῦ βαλάνου ἐστὶ τὸ γενέσθαι δρῦς'
   bannerHighlight = ' '
-  bannerSubtitle = 'A scientific approach applied through the history and philosophy of science and medicine'
+  bannerSubtitle = ' "an acorn’s telos is to become an oak tree" — Aristotle  '
 
   # === Content Limits ===
   homepagePostsLimit = 10

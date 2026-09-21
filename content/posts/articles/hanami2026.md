@@ -5,8 +5,7 @@ draft: false
 tags:
   - hanami
 description: what we learn from hanami
-cover: "/img/hanami2026-img.png"
-link: ""
+cover: /img/traditions.jpg
 toc: true
 math: true
 ---

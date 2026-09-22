@@ -1,0 +1,51 @@
+{{/* card-thumb.html — the image URL for a page's card.
+
+     The picture is chosen by card-image.html (cover, image URL, or the og:image
+     of an external link) and resized to a 16:9 WebP so a 300 KB photo arrives
+     as a few kilobytes. A page with no picture — or whose picture cannot be
+     found — gets a generated tile in the site's colours with the first letter
+     of its title, returned as an inline SVG so nothing extra is downloaded.
+     The tile's colours are picked from the page's address, so each post keeps
+     the same one. */}}
+{{- $page := . -}}
+{{- $src := partial "card-image.html" $page -}}
+{{- $src = $src | replaceRE `^['"]+` "" | replaceRE `['"]+$` "" -}}
+{{- $url := "" -}}
+{{- $spec := "800x450 Smart webp q80" -}}
+
+{{- with $src -}}
+  {{- $img := "" -}}
+  {{- if or (hasPrefix . "http://") (hasPrefix . "https://") -}}
+    {{- $opts := dict "headers" (dict "User-Agent" "Mozilla/5.0 (compatible; Hugo static site build)") -}}
+    {{- with try (resources.GetRemote . $opts) -}}
+      {{- with .Err }}{{ warnf "card image: could not fetch %q (%s)" $src . }}
+      {{- else }}{{ with .Value }}{{ if eq .MediaType.MainType "image" }}{{ $img = . }}{{ end }}{{ end }}{{ end -}}
+    {{- end -}}
+  {{- else -}}
+    {{- with $page.Resources.GetMatch . }}{{ $img = . }}{{ end -}}
+    {{- if not $img -}}
+      {{- /* static/img is also mounted as assets/img (see hugo.toml), so a
+             path like /img/photo.jpg can be resized here. */ -}}
+      {{- with resources.Get (strings.TrimPrefix "/" .) }}{{ $img = . }}{{ end -}}
+    {{- end -}}
+    {{- if not $img }}{{ warnf "card image: %q was not found in static/ or beside the post — check the path" $src }}{{ end -}}
+  {{- end -}}
+  {{- with $img -}}
+    {{- if in (slice "svg" "gif") .MediaType.SubType -}}
+      {{- $url = .RelPermalink -}}
+    {{- else -}}
+      {{- with try (.Fill $spec) }}{{ with .Value }}{{ $url = .RelPermalink }}{{ end }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if not $url -}}
+  {{- $t := partial "utils/title" $page | plainify | htmlUnescape -}}
+  {{- $letter := $t | replaceRE `^[^\p{L}\p{N}]+` "" | strings.FirstUpper -}}
+  {{- $letter = substr $letter 0 1 | default "·" -}}
+  {{- $pairs := slice (slice "#0D1A63" "#2845D6") (slice "#1A2CA3" "#2845D6") (slice "#0D1A63" "#CD071F") (slice "#1A2CA3" "#F68048") -}}
+  {{- $p := index $pairs (mod (hash.FNV32a $page.RelPermalink) (len $pairs)) -}}
+  {{- $svg := printf `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%s'/><stop offset='1' stop-color='%s'/></linearGradient><pattern id='s' width='18' height='18' patternUnits='userSpaceOnUse' patternTransform='rotate(45)'><rect width='9' height='18' fill='#fff' fill-opacity='.06'/></pattern></defs><rect width='800' height='450' fill='url(#g)'/><rect width='800' height='450' fill='url(#s)'/><text x='400' y='245' text-anchor='middle' dominant-baseline='middle' font-family='ui-sans-serif,system-ui,sans-serif' font-size='170' font-weight='600' fill='#fff' fill-opacity='.92'>%s</text></svg>` (index $p 0) (index $p 1) (htmlEscape $letter) -}}
+  {{- $url = printf "data:image/svg+xml;base64,%s" (base64Encode $svg) -}}
+{{- end -}}
+{{- return $url -}}

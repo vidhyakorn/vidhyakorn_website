@@ -1,0 +1,28 @@
+{{/* utils/title (project override) — the one place Hextra asks for a page's
+     title: the sidebar, the breadcrumb, previous/next links and the page
+     heading all come through here.
+
+     Addition: a page that names a DOI or source but has no title: in its
+     front matter uses the title imported from that source, so a publication
+     never appears as its filename ("CBC2025"). Otherwise identical to the
+     theme's version. */}}
+{{- $title := "" }}
+
+{{- if and .IsPage (not .Params.title) (or .Params.doi .Params.source .Params.link .Params.external) -}}
+  {{- $m := partialCached "paper-meta.html" . .RelPermalink -}}
+  {{- with $m.title }}{{ $title = . }}{{ end -}}
+{{- end -}}
+
+{{- if not $title -}}
+  {{ if .LinkTitle }}
+    {{ $title = .LinkTitle }}
+  {{ else if .Title }}
+    {{ $title = .Title }}
+  {{ else if and .IsSection .File }}
+    {{ $title = path.Base .File.Dir | humanize | title }}
+  {{ else if and .IsPage .File }}
+    {{ $title = .File.BaseFileName | humanize | title }}
+  {{ end }}
+{{- end -}}
+
+{{ return $title -}}

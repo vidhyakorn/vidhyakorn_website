@@ -1,0 +1,20 @@
+{{/* section-list — the pages in the current section as a card grid, newest
+     first, each with its picture (or generated tile) and where it appeared.
+
+     {{< section-list >}}
+     {{< section-list empty="Nothing here yet." >}}   message when empty */}}
+{{- $pages := sort .Page.RegularPages "Date" "desc" -}}
+{{- if $pages -}}
+<div class="hextra-cards hx:mt-4 hx:gap-4 hx:grid not-prose" style="--hextra-cards-grid-cols: 3;">
+  {{- range $pages -}}
+    {{- partial "shortcodes/card.html" (dict
+          "link" .RelPermalink
+          "title" (partial "utils/title" .)
+          "subtitle" (partial "card-subtitle.html" .)
+          "image" (partial "card-thumb.html" .)
+          "alt" "") -}}
+  {{- end -}}
+</div>
+{{- else -}}
+<p class="site-empty">{{ .Get "empty" | default "Nothing here yet." }}</p>
+{{- end -}}

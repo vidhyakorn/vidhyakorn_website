@@ -1,163 +1,199 @@
-# Spectra — https://github.com/JoeYang1412/hugo-theme-spectra
-# Started from the theme's exampleSite/hugo.toml. Spectra ships its own defaults
-# in themes/hugo-theme-spectra/hugo.toml, which Hugo merges automatically.
+# Hextra — https://github.com/imfing/hextra  (v0.12.3, vendored in themes/hextra)
+# Layout modelled on https://developers.osuny.org/, which is itself built on Hextra.
+# CUSTOMISING.md explains where to change colours, the homepage and the sidebar.
 
 baseURL = 'https://vidhyakorn.github.io/vma/'
 locale = 'en'
 defaultContentLanguage = 'en'
-defaultContentLanguageInSubdir = false
-title = 'VMA'
-theme = 'hugo-theme-spectra'
+title = 'Vidhyakorn Mahd-Adam'
+theme = 'hextra'
 
-# Obsidian note templates live in content/_templates/ so they are visible
-# in the vault, but they are not pages and must never be published.
-ignoreFiles = ['content/_templates/.*']
+enableRobotsTXT = true
+enableInlineShortcodes = true
+
+# Obsidian note templates live in content/_templates/ so they are visible in
+# the vault, but they are not pages and must never be published.
+ignoreFiles = ['content/_templates/.*', '\.obsidian/.*']
 
 [outputs]
-  home = ['HTML', 'RSS', 'JSON']
-
-[pagination]
-  pagerSize = 10
+  home = ['html']
+  page = ['html']
+  section = ['html', 'rss']
 
 [taxonomies]
   tag = 'tags'
-  series = 'series'
-
-[params]
-  # === Identity ===
-  description = 'Vidhyakorn Mahd-Adam'
-  author = 'Vidhyakorn Mahd-Adam'
-  tagline = ' in progress '
-  bio = 'Research Assistant at MORU, Bangkok.'
-  avatar = '/img/profile.jpg'
-  # Banner background image. Left unset, the theme draws its own gradient.
-  # banner = '/img/banner.webp'
-
-  # === Banner Text ===
-  bannerTitle = 'τὸ τέλος τοῦ βαλάνου ἐστὶ τὸ γενέσθαι δρῦς'
-  bannerHighlight = ' '
-  bannerSubtitle = ' "an acorn’s telos is to become an oak tree" — Aristotle  '
-
-  # === Content Limits ===
-  homepagePostsLimit = 10
-  cardSummaryLength = 150
-  relatedPostsLimit = 3
-  cardImageQuality = 80
-  coverImageQuality = 85
-
-  # === Feature Toggles ===
-  enableLoadingAnimation = true
-  enableMouseGlow = true
-  showBanner = true
-  showReadingProgress = true
-  enableLightbox = true
-  showScrollTop = true
-  enableSearch = true
-  showRelatedPosts = true
-  showSeriesNav = true
-  enableCodeCopy = true
-  enableScrollAnimation = true
-
-  # === Fonts (this REPLACES the theme's whole Google Fonts URL) ===
-  googleFontsURL = 'https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap'
-
-  # === Your own CSS/JS (loaded after the theme, so it overrides) ===
-  customCSS = ['css/custom.css']
-  # customJS  = ['js/custom.js']
-
-  # === Publication metadata lookups ===
-  # Crossref serves identified requests from a faster pool.
-  crossrefMailto = 'vidhyakornadam@gmail.com'
-
-  # === Share ===
-  sharePlatforms = ['bluesky', 'linkedin']
-
-  # === Academic profiles ===
-  # TODO: paste your URLs and uncomment. LinkedIn has a built-in icon;
-  # ORCID and Google Scholar fall back to a generic external-link icon.
-  [[params.social]]
-  name = "ORCID"
-  url = "https://orcid.org/0009-0008-2468-8870"
-  [[params.social]]
-  name = "Google Scholar"
-  url = "https://scholar.google.com/citations?hl=en&user=jgY_JOAAAAAJ"
-  [[params.social]]
-  name = "LinkedIn"
-  url = "https://www.linkedin.com/in/vidhyakorn"
-
-  # === Style Overrides ===
-  [params.style]
-    fontDisplay = "'IM Fell English', Georgia, 'Times New Roman', serif"
-    fontBody = "'EB Garamond', Georgia, 'Times New Roman', serif"
-    fontMono = "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace"
-    colorAccent = '#1A2CA3'
-    colorAccentWarm = '#CD071F'
-    colorAccentSoft = '#F68048'
-    bgPrimary = '#FFFFFF'
-    bgSurface = '#FFFFFF'
-    textPrimary = '#141A2E'
-    bannerImageText = '#FFFFFF'
-    bannerImageGradient = 'linear-gradient(135deg, #0D1A63 0%, #2845D6 55%, #F68048 100%)'
-
-  [params.sidebar]
-    showAllPosts = true
-    showCategories = true
-    showTags = true
-    showRecent = true
-    categoryLimit = 5
-    tagsLimit = 20
-    recentLimit = 5
 
 [markup]
   [markup.highlight]
-    guessSyntax = true
     noClasses = false
-    lineNos = false
-    lineNumbersInTable = true
-  [markup.tableOfContents]
-    startLevel = 2
-    endLevel = 4
   [markup.goldmark.renderer]
     unsafe = true
   [markup.goldmark.extensions.passthrough]
     enable = true
     [markup.goldmark.extensions.passthrough.delimiters]
-      block = [['$$', '$$']]
-      inline = [['$', '$']]
+      block = [['\[', '\]'], ['$$', '$$']]
+      inline = [['\(', '\)'], ['$', '$']]
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
 
+# ---------------------------------------------------------------------------
+# Top navigation — left to right in weight order.
+# ---------------------------------------------------------------------------
 [[menu.main]]
-  name = "Home"
-  pageRef = "/"
+  name = 'Research'
+  pageRef = '/research'
   weight = 1
-  pre = "⌂"
 [[menu.main]]
-  name = "About"
-  pageRef = "/about"
+  name = 'Writing'
+  pageRef = '/blog'
+  weight = 2
+[[menu.main]]
+  name = 'About'
+  pageRef = '/about'
   weight = 3
-  pre = "◉"
 [[menu.main]]
-  name = "Writing"
-  pageRef = "/posts"
-  weight = 2
-  pre = "✎"
+  name = 'Search'
+  weight = 4
+  [menu.main.params]
+    type = 'search'
+# Icons on the far right. ORCID and Google Scholar are added in data/icons.yaml.
 [[menu.main]]
-  name = "Publications"
-  pageRef = "/posts"
-  weight = 2
-  pre = "✎"
+  name = 'ORCID'
+  url = 'https://orcid.org/0009-0008-2468-8870'
+  weight = 5
+  [menu.main.params]
+    icon = 'orcid'
+[[menu.main]]
+  name = 'Google Scholar'
+  url = 'https://scholar.google.com/citations?hl=en&user=jgY_JOAAAAAJ'
+  weight = 6
+  [menu.main.params]
+    icon = 'googlescholar'
+[[menu.main]]
+  name = 'LinkedIn'
+  url = 'https://www.linkedin.com/in/vidhyakorn'
+  weight = 7
+  [menu.main.params]
+    icon = 'linkedin'
 
-[related]
-  includeNewer = true
-  threshold = 50
-  toLower = true
-  [[related.indices]]
-    name = "tags"
-    weight = 80
-  [[related.indices]]
-    name = "date"
-    weight = 10
-    pattern = "2006"
+# Extra links at the bottom of the Research sidebar.
+[[menu.sidebar]]
+  identifier = 'more'
+  name = 'More'
+  weight = 1
+  [menu.sidebar.params]
+    type = 'separator'
+[[menu.sidebar]]
+  name = 'Writing'
+  pageRef = '/blog'
+  weight = 2
+[[menu.sidebar]]
+  name = 'About & CV'
+  pageRef = '/about'
+  weight = 3
+
+[params]
+  description = 'Vidhyakorn Mahd-Adam — research assistant at MORU, Bangkok. Epidemiological and social modelling, health policy, and the history and philosophy of science and medicine.'
+  externalLinkDecoration = true
+  dateFormat = 'January 2, 2006'
+  displayUpdatedDate = false
+
+  # Publication metadata lookups — Crossref serves identified requests from a
+  # faster pool. See layouts/_partials/paper-meta.html.
+  crossrefMailto = 'vidhyakornadam@gmail.com'
+
+  # ---------------------------------------------------------------------------
+  # Homepage — the Osuny-style hero. Everything below the button (the card
+  # grids of latest publications and writing) is generated automatically.
+  # ---------------------------------------------------------------------------
+  [params.home]
+    badge = 'MORU · Bangkok'
+    badgeLink = '/about'
+    headline = 'τὸ τέλος τοῦ βαλάνου ἐστὶ τὸ γενέσθαι δρῦς'
+    subtitle = '“An acorn’s telos is to become an oak tree.” — Aristotle'
+    intro = 'I work on epidemiological and social modelling and health policy at MORU, and on the history and philosophy of science and medicine.'
+    buttonText = 'Read my research'
+    buttonLink = '/research'
+    # How many cards in each grid.
+    publications = 3
+    writing = 3
+
+  [params.navbar]
+    displayTitle = true
+    displayLogo = false
+    width = 'wide'
+
+  [params.page]
+    width = 'normal'
+
+  [params.theme]
+    default = 'system'
+    displayToggle = true
+
+  [params.footer]
+    enable = true
+    displayCopyright = true
+    displayPoweredBy = true
+    width = 'normal'
+
+  [params.search]
+    enable = true
+    type = 'flexsearch'
+    [params.search.flexsearch]
+      index = 'content'
+      tokenize = 'forward'
+      # FlexSearch is kept in the repo (assets/lib/) instead of being fetched
+      # from a CDN on every build, so a CDN outage can't break a deploy.
+      js = 'lib/flexsearch.bundle.min.js'
+
+  [params.editURL]
+    enable = false
+
+  [params.blog.list]
+    displayTags = true
+    sortBy = 'date'
+    sortOrder = 'desc'
+    pagerSize = 20
+
+  [params.blog.article]
+    displayPagination = true
+
+  [params.toc]
+    displayTags = true
 
 [caches]
   [caches.images]
     dir = ':cacheDir/images'
+
+# ---------------------------------------------------------------------------
+# Folder mounts. Declaring any mount replaces Hugo's defaults, so all of them
+# are listed. The last one is the only addition: it makes static/img visible
+# to Hugo's image processing as well, so card pictures kept in static/img are
+# resized to small WebP files instead of being sent at full size.
+# ---------------------------------------------------------------------------
+[module]
+  [[module.mounts]]
+    source = 'content'
+    target = 'content'
+  [[module.mounts]]
+    source = 'static'
+    target = 'static'
+  [[module.mounts]]
+    source = 'layouts'
+    target = 'layouts'
+  [[module.mounts]]
+    source = 'data'
+    target = 'data'
+  [[module.mounts]]
+    source = 'assets'
+    target = 'assets'
+  [[module.mounts]]
+    source = 'i18n'
+    target = 'i18n'
+  [[module.mounts]]
+    source = 'archetypes'
+    target = 'archetypes'
+  [[module.mounts]]
+    source = 'static/img'
+    target = 'assets/img'

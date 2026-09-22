@@ -1,0 +1,17 @@
+{{/* card-subtitle.html — the grey line under a card's title.
+     A publication shows where and when it appeared (imported from its DOI or
+     source page when there is one); anything else shows its description or a
+     short summary. */}}
+{{- $page := . -}}
+{{- $out := "" -}}
+{{- if or $page.Params.doi $page.Params.source $page.Params.link $page.Params.external -}}
+  {{- $m := partialCached "paper-meta.html" $page $page.RelPermalink -}}
+  {{- if $m.ok -}}
+    {{- $where := or $m.journal $m.publisher -}}
+    {{- $out = delimit (slice $where $m.year | complement (slice "" nil)) ", " -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $out -}}
+  {{- $out = partial "pub-summary.html" $page -}}
+{{- end -}}
+{{- return $out -}}

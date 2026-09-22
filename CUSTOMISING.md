@@ -1,263 +1,202 @@
 # Changing how the site looks
 
-Everything you are likely to want to change lives in two files:
+The site uses the [Hextra](https://imfing.github.io/hextra/docs/) theme, laid
+out after [developers.osuny.org](https://developers.osuny.org/) (which is itself
+built on Hextra). Nearly everything you will want to change lives in two files:
 
 | What | File |
 |---|---|
-| Colours, fonts, site title, menu, social links | `hugo.toml` |
-| Card size, spacing, anything finer | `assets\css\custom.css` |
+| Homepage text, menu, icons, site title | `hugo.toml` |
+| Colours, card look, spacing, anything finer | `assets\css\custom.css` |
 
-`themes\hugo-theme-spectra\` is the theme. **Never edit anything in there.** If
-you change a theme file, the next theme update overwrites it. Everything in
-`layouts\` at the top level is a copy that overrides the theme's version, and
-those are safe to edit.
+`themes\hextra\` is the theme. **Never edit anything in there** — a theme update
+would overwrite it. Everything in `layouts\` at the top level is a copy that
+overrides the theme's version, and those are safe to edit.
 
 After any change: save, commit and push in GitHub Desktop. The site rebuilds by
 itself and is live in two or three minutes.
 
 ---
 
-## Colours
+## Where things live
 
-In `hugo.toml`, under `[params.style]`:
-
-```toml
-[params.style]
-  colorAccent = '#1A2CA3'      # links, active menu item, buttons
-  colorAccentWarm = '#CD071F'  # small marks — tag hover, the dot on each card
-  colorAccentSoft = '#F68048'  # decorative fills only, never text
-  bgPrimary = '#FFFFFF'        # page background
-  bgSurface = '#FFFFFF'        # card and panel background
-  textPrimary = '#141A2E'      # body text
+```
+content\
+  _index.md                  the homepage (its text is in hugo.toml, see below)
+  research\                  everything in the left-hand sidebar
+    _index.md                the Research overview page
+    publications\            one .md per paper
+    projects\                ongoing research
+    methods\                 methods notes
+  blog\                      Writing — essays, dated, newest first
+  about\index.md             About, with your photo and CV
+static\img\                  pictures
+static\cv\vidhyakorn-cv.pdf  the CV shown on About
 ```
 
-The current palette, and why each colour sits where it does:
+**The folder decides where a page appears.** A file in
+`content\research\projects\` shows up in the sidebar under Projects; a file in
+`content\blog\` shows up under Writing. There is no category setting inside the
+file.
 
-| Colour | Used for | Contrast on white |
-|---|---|---|
-| `#0D1A63` Ink | headings | 15.6 : 1 |
-| `#1A2CA3` Deep | links, active tab | 10.9 : 1 |
-| `#2845D6` Bright | hover, focus, fills | 7.2 : 1 |
-| `#CD071F` Signal | small features | 5.8 : 1 |
-| `#F68048` Flame | fills and marks only | **2.6 : 1 — fails** |
+To add a new sidebar group, make a folder under `content\research\` with an
+`_index.md` in it:
 
-Text needs at least 4.5 : 1 to be readable for everyone. Flame is nowhere near,
-which is why it is never used for words — only as a fill, and anything sitting
-*on* it is dark blue. If you swap in a new colour, check it at
-[webaim.org/resources/contrastchecker](https://webaim.org/resources/contrastchecker/)
-before using it for text.
+```yaml
+---
+title: "Teaching"
+description: "Courses and workshops."
+weight: 4          # position in the sidebar: 1 is first
+---
+```
 
-Headings use a colour that is **not** in that config block, because the theme
-has no setting for it. It is the `--ink` line near the top of `custom.css`:
+---
+
+## The homepage
+
+In `hugo.toml`, under `[params.home]`:
+
+```toml
+[params.home]
+  badge = 'MORU · Bangkok'           # the small pill at the top, with the red dot
+  badgeLink = '/about'
+  headline = 'τὸ τέλος τοῦ βαλάνου ἐστὶ τὸ γενέσθαι δρῦς'
+  subtitle = '“An acorn’s telos is to become an oak tree.” — Aristotle'
+  intro = 'I work on …'              # one short paragraph
+  buttonText = 'Read my research'
+  buttonLink = '/research'
+  publications = 3                   # how many cards in each grid
+  writing = 3
+```
+
+Leave any line out and that piece simply isn't shown. The card grids under the
+button — latest publications, latest writing — fill themselves in from your
+content; you never edit them. Anything you write in `content\_index.md` appears
+below the grids.
+
+---
+
+## Colours
+
+At the top of `assets\css\custom.css`:
 
 ```css
 :root {
-  --ink: #0D1A63;
+  --primary-hue: 232deg;
+  --primary-saturation: 72.5%;
+  --primary-lightness: 41.2%;
+
+  --ink: #0D1A63;      /* headings */
+  --deep: #1A2CA3;     /* links, buttons */
+  --bright: #2845D6;   /* hover */
+  --signal: #CD071F;   /* small marks: the badge dot, "Abstract" labels */
+  --flame: #F68048;    /* decorative only: card hover line, citation panel edge */
 }
 ```
 
-Dark mode has its own set of values further down `custom.css`, under
-`[data-theme="dark"]`. The dark blues are lifted there — `#1A2CA3` is invisible
-against a dark background.
+The three `--primary-*` numbers are how Hextra works: it builds its entire blue
+scale — buttons, the active sidebar item, focus rings — from one hue,
+saturation and lightness. Its buttons use lightness × 0.9, which is why 41.2%
+comes out as exactly `#1A2CA3`. To move to a different main colour, find its
+HSL values (any colour picker shows them) and divide the lightness by 0.9.
+
+Contrast on white, for reference — text needs at least 4.5 : 1:
+
+| Colour | Contrast | Safe for text? |
+|---|---|---|
+| `#0D1A63` Ink | 15.6 : 1 | yes |
+| `#1A2CA3` Deep | 10.9 : 1 | yes |
+| `#2845D6` Bright | 7.2 : 1 | yes |
+| `#CD071F` Signal | 5.8 : 1 | yes |
+| `#F68048` Flame | 2.6 : 1 | **no** — fills and lines only |
+
+Dark mode has its own values just below, under `.dark { … }`. The dark blues
+are lifted there, because `#1A2CA3` disappears against a black background.
 
 ---
 
 ## Fonts
 
-Two steps, both in `hugo.toml`, and you must do both.
+The site uses each reader's own system font — San Francisco on a Mac, Segoe UI
+on Windows — exactly as Osuny does. Nothing is downloaded, so text appears
+instantly.
 
-**1. Load the font.** Go to [fonts.google.com](https://fonts.google.com), pick
-your fonts, copy the URL out of the embed snippet, and replace this line:
-
-```toml
-googleFontsURL = 'https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap'
-```
-
-This one line replaces *every* font the site loads, so whatever you put there
-must include all three — heading, body and the monospace one used for code and
-dates. Drop `JetBrains+Mono` and the code blocks lose their font.
-
-**2. Use it.** Under `[params.style]`:
-
-```toml
-fontDisplay = "'IM Fell English', Georgia, 'Times New Roman', serif"
-fontBody = "'EB Garamond', Georgia, 'Times New Roman', serif"
-fontMono = "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace"
-```
-
-`fontDisplay` is the site title, banner, headings and card titles. `fontBody` is
-everything you read. The names after the first are fallbacks, used while the
-font downloads or if it fails — keep at least one.
-
-**A warning about weights.** IM Fell English only comes in regular and italic.
-Ask a browser for bold and it fakes one by smearing the letters, which looks
-bad. That is why `custom.css` forces headings to `font-weight: 400`. If you move
-to a font that *does* have a bold, delete this block from `custom.css` to get
-bold headings back:
-
-```css
-h1, h2, h3, h4, h5, h6,
-.article-header h1,
-.post-card-title,
-.banner-title {
-  font-weight: 400;
-}
-```
-
-**Body text size** — EB Garamond sets small, so it is nudged up. In
+To use a web font instead, add the Google Fonts `<link>` to
+`layouts\_partials\custom\head-end.html` (create it) and set it in
 `custom.css`:
 
 ```css
-.single-layout > .article-content p { font-size: 1.06rem; }
+body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
 ```
-
-`1rem` is the browser default, roughly 16px. `1.06rem` is 6% larger.
 
 ---
 
 ## Cards
 
-All in `custom.css`, in the section headed `CARDS`.
+**Pictures** — first one filled in wins:
 
-**Height.** One number controls every card:
+1. `cover: "/img/picture.jpg"` — a file in `static\img\`. The path starts at
+   `/img/`, never `/static/img/`.
+2. `cover: "https://example.org/picture.jpg"` — any image on the web.
+3. `link: "https://journal.org/article"` — the site uses that page's preview
+   image.
+4. Nothing — a coloured tile with the title's first letter. The colours are
+   chosen from the page's address, so each post keeps the same tile.
 
-```css
-@media (min-width: 901px) {
-  :root { --card-h: 230px; }
-}
-```
+Every picture is cropped to the same 16 : 9 box and converted to a small WebP
+when the site builds, so a 300 KB photo arrives as a few kilobytes and a grid
+stays even. If a path is wrong, the card falls back to the tile and the build
+log names the file it couldn't find.
 
-Every card is exactly this tall whether or not it has an image, which is what
-keeps a list of posts even. Make it smaller and the text clamps tighter; make it
-much smaller and the title starts to get cut off.
-
-**Image width:**
-
-```css
-.post-card-cover { width: 240px; }
-```
-
-The image is cropped to fill that box, so a tall photo and a wide screenshot
-take the same space.
-
-**How much text shows.** The title is cut off after two lines and the summary
-after two:
+**Shape and size** — in `custom.css`, the `CARDS` section:
 
 ```css
-.post-card h3 { -webkit-line-clamp: 2; }
-.post-card p  { -webkit-line-clamp: 2; }
+.hextra-card .hextra-card-image { aspect-ratio: 16 / 9; }   /* picture shape */
+.hextra-card .hextra-card-icon  { -webkit-line-clamp: 3; }  /* title lines */
 ```
 
-Raise those numbers and you must raise `--card-h` too, or the extra lines are
-simply hidden.
-
-**Summary length** — in `hugo.toml`, `cardSummaryLength = 150` is how many
-characters of the description are used before the `…`.
-
-**On phones** cards stack with the image on top, so the *image* gets a fixed
-height instead of the whole card. That is the `@media (max-width: 900px)` block
-just below.
-
-Everything inside `@media (min-width: 901px)` applies on laptops and desktops
-only; everything inside `@media (max-width: 900px)` applies on phones. **This is
-the usual reason a change appears to do nothing** — if you edit a rule in the
-desktop block and then look at the site in a narrow window, it will not apply.
+**Card text** — a publication's card shows where and when it appeared, taken
+from its DOI. Anything else shows its `description:`, or the start of the text.
 
 ---
 
-## Spacing
+## Publications — no typing
 
-In `custom.css`, under `SPACING`:
-
-```css
-.main-content  { padding: 2rem 1.75rem; }   /* margin around the whole page */
-.article-content { padding: 2rem 2.25rem; } /* inside an article */
-.post-card { margin-bottom: 1.1rem; }       /* gap between cards */
-.banner { height: 34vh; }                   /* the coloured header */
-```
-
-`vh` means percent of screen height, so `34vh` is about a third of the window.
-
----
-
-## The banner
-
-In `hugo.toml`:
-
-```toml
-bannerTitle = 'Vidhyakorn Mahd-Adam'
-bannerSubtitle = 'A scientific approach applied through …'
-showBanner = true            # false removes it entirely
-bannerImageGradient = 'linear-gradient(135deg, #0D1A63 0%, #2845D6 55%, #F68048 100%)'
-```
-
-To use a photo instead of the gradient, put the file in `static\img\` and set
-`banner = '/img/yourfile.jpg'` under `[params]`.
-
----
-
-## Menu, sidebar, profile
-
-In `hugo.toml`:
-
-- `title`, `tagline`, `bio`, `avatar` — the top of the sidebar
-- `[[menu.main]]` blocks — the navigation. `weight` sets the order (lower first),
-  `pre` is the little symbol
-- `[[params.social]]` blocks — the icons under your photo
-- `[params.sidebar]` — which sections appear, and how many items each shows
-
----
-
-## Adding a post
-
-Write it in Obsidian, anywhere under `content\posts\`. **The folder decides the
-category**: a file in `content\posts\articles\` appears under Articles. There is
-no category setting in the file itself.
+In `content\research\publications\`, a new file needs only this:
 
 ```yaml
 ---
-title: "Your title"
-date: 2026-09-20
-draft: true          # false to publish
-tags: [modelling, covid-19]
-description: "One or two sentences — this is the card text."
-cover: "/img/yourpicture.jpg"
+date: 2026-09-22
+doi: "10.1186/s12889-025-25811-5"
+tags: [modelling]
 ---
 ```
 
-**A file with no front matter still gets published as a blank page.** If you
-create a note and leave it empty, delete it rather than leaving it in
-`content\`.
+When the site builds, the title, every author, the journal, the year and the
+abstract are fetched and put on the page, with "Read the paper" and DOI
+buttons. The title also appears in the sidebar, the card and the browser tab.
+Journal DOIs come from Crossref; figshare, Zenodo and other repository DOIs from
+DataCite. With no DOI, use `source: "https://…"` and the page's own citation
+tags are read instead.
 
-### Card images
+Anything you write yourself wins over what is fetched:
 
-First one filled in wins:
+- `title:` — a different title everywhere
+- `linkTitle:` — a short label for the sidebar only, e.g. `"PHPIT, 2025"`
+- `description:` — replaces the fetched line under the card
+- text in the body — replaces the fetched abstract on the page
 
-1. `cover: "/img/picture.jpg"` — your own file, saved in `static\img\`. The path
-   starts at `/img/`, not `/static/img/`.
-2. `cover: "https://example.org/picture.jpg"` — any image on the web, downloaded
-   and resized at build time.
-3. `link: "https://journal.org/article"` — the site reads that page's preview
-   image.
-4. Nothing — a patterned tile with the title's first letter, the pattern chosen
-   from the title so it never changes.
+`content\_templates\new-publication.md` is a ready-made starting point.
 
-### Putting a diagram in the text
+---
 
-**The simple way.** Save the file in `static\img\`, then in the post write:
+## Pictures and diagrams in the text
 
 ```markdown
 ![What the diagram shows](/img/model-structure.png)
 ```
 
-The path starts at `/img/`, never `/static/img/` — `static` is the folder Hugo
-copies *from*, so it disappears from the address. The text in the brackets is
-what a screen reader announces and what shows if the image fails to load; it is
-worth writing properly.
-
-That stretches the picture to the full width of the column, which is right for a
-screenshot and usually too big for a diagram. To size it, add a caption, or
-wrap text around it, use the figure shortcode instead:
+That fills the column. To size it or add a caption:
 
 ```markdown
 {{< figure src="/img/model-structure.png"
@@ -266,82 +205,63 @@ wrap text around it, use the figure shortcode instead:
            width="520" >}}
 ```
 
-- `width` is in pixels and caps the picture; leave it out for full width.
-- `caption` accepts markdown, so `**Figure 1.**` comes out bold.
-- `align="left"` or `align="right"` floats it and lets the text wrap around;
-  the default is centred. On a phone it always goes full width.
+`width` is in pixels; `align="left"` or `"right"` wraps the text around it.
+**Separate the settings with spaces, not commas** — a comma stops the whole site
+from building.
 
-Readers can click any picture in an article to see it full size.
+To paste from Obsidian, make the post a folder (`hanami2026\index.md`) and keep
+its pictures beside it; then `![](diagram.png)` needs no path. Obsidian's own
+`![[diagram.png]]` does not work.
 
-**Pasting straight from Obsidian.** Turn the post into a *folder* instead of a
-single file — `hanami2026.md` becomes `hanami2026\index.md`. Images can then
-sit in that folder beside the post and you refer to them by name alone:
+---
 
-```markdown
-![Model structure](diagram.png)
+## Menu and icons
 
-{{< figure src="diagram.png" caption="Figure 1." width="520" >}}
+The `[[menu.main]]` blocks in `hugo.toml`, left to right by `weight`. An entry
+with an `icon` shows as an icon:
+
+```toml
+[[menu.main]]
+  name = 'ORCID'
+  url = 'https://orcid.org/0009-0008-2468-8870'
+  weight = 5
+  [menu.main.params]
+    icon = 'orcid'
 ```
 
-This is what makes pasting work. Obsidian is already set to save attachments
-next to the note, so a pasted screenshot lands in the right folder on its own.
-One setting is worth changing: **Settings → Files & Links → New link format →
-Relative to note**. Without it Obsidian writes a long path from the vault root,
-which Hugo cannot follow.
+Hextra has icons for GitHub, LinkedIn, X, Mastodon, Bluesky and more. ORCID and
+Google Scholar were added in `data\icons.yaml`; add others there the same way.
 
-Keeping each post in its own folder also keeps its pictures with it — move or
-delete the post and the images go too.
+`[[menu.sidebar]]` blocks add links to the bottom of the Research sidebar.
 
-**Two things that will not work.** Obsidian's own embed syntax, `![[file.png]]`,
-is not markdown and Hugo ignores it; use `![](file.png)`. And an image simply
-dropped next to an ordinary `.md` post — one that is not a folder with
-`index.md` — is not published at all, so the picture comes out broken.
-
-### Publications — no typing
-
-Put the DOI in the front matter and leave the rest out:
-
-```yaml
 ---
-date: 2026-09-20
-doi: "10.1186/s12889-025-25811-5"
-tags: [modelling]
----
-```
 
-The title, all the authors, the journal, the year and the abstract are fetched
-when the site builds, and a citation panel with a "Read the paper" button is
-added under the heading. Journal DOIs come from Crossref; figshare, Zenodo and
-other repository DOIs come from DataCite. For something with no DOI use
-`source: "https://..."` and its page's citation tags are read instead.
+## About page
 
-Anything you write yourself overrides what is fetched — add a `title:` for a
-shorter one on the card, or a `description:` in place of the abstract.
+Your photo is `content\about\profile.jpg`. Its size on the page is set in
+`custom.css` under `ABOUT PAGE` — change `200px`. The CV comes from
+`static\cv\vidhyakorn-cv.pdf`; export a new one from Typst over the top of it.
 
 ---
 
 ## When a change seems to do nothing
 
-1. **Check the width.** Rules inside `@media (min-width: 901px)` do not apply to
-   a narrow window. Maximise the browser and look again.
-2. **Wait for the build.** Pushing is not publishing. Open the repository on
-   GitHub, click **Actions**, and wait for the tick. Two or three minutes.
-3. **Hard refresh** — Ctrl+F5. The stylesheet is now named after a hash of its
-   contents, so a change renames the file and the browser is forced to fetch it.
-   Pages themselves can still be held in cache for a minute or two.
-4. **Check you edited the right file.** A change in
-   `themes\hugo-theme-spectra\` is overridden by the copy in `layouts\` or by
-   `custom.css`, and will appear to do nothing.
+1. **Wait for the build.** Pushing is not publishing. On GitHub, open
+   **Actions** and wait for the green tick.
+2. **Check the build didn't fail.** A red cross means the live site is still
+   the previous version. Click it — the error names the file and the line.
+3. **Hard refresh** with Ctrl+F5. The stylesheet is named after a hash of its
+   contents, so it can't be stale, but a page can be cached for a minute.
+4. **Check you edited the right file** — never a file under `themes\`.
 
 ## Seeing changes instantly
 
-Instead of pushing and waiting each time, run the site on your own machine:
+Instead of pushing and waiting, run the site on your own machine:
 
 ```
 cd D:\1project\vidhyakorn_website
 hugo server
 ```
 
-Open http://localhost:1313. Every save appears in the browser immediately. Stop
-it with Ctrl+C. You need Hugo **extended** installed for this — the site uses
-SCSS, which the ordinary build cannot compile.
+Open http://localhost:1313/vma/ and every save shows up at once. Stop it with
+Ctrl+C. Publication details still need an internet connection to be fetched.

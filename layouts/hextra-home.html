@@ -1,0 +1,82 @@
+{{/* hextra-home (project override) — an Osuny-style homepage.
+
+     A hero (badge, headline, subtitle, a line of introduction, one button),
+     then card grids of the latest publications and writing. The hero text
+     comes from [params.home] in hugo.toml; the cards are generated from the
+     content, so a new publication shows up here without editing this page.
+
+     Only class names that Hextra itself uses appear below (its CSS is
+     precompiled, so a new Tailwind class would simply not exist); anything
+     extra is styled by the site-* classes in assets/css/custom.css. */}}
+{{ define "main" }}
+{{- $h := site.Params.home -}}
+<div class='hx:mx-auto hx:flex hextra-max-page-width'>
+  {{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}
+  <main id="content" class="hx:w-full hx:break-words hx:min-h-[calc(100vh-var(--navbar-height))] hx:min-w-0 hx:pb-8 hx:pt-8 hx:md:pt-12 hx:pl-[max(env(safe-area-inset-left),1.5rem)] hx:pr-[max(env(safe-area-inset-left),1.5rem)]">
+    <div class="site-home">
+
+      {{/* ---------------- hero ---------------- */}}
+      <section class="site-hero">
+        {{- with $h.badge -}}
+        {{- $bl := $h.badgeLink | default "" -}}
+        <a {{ with $bl }}href="{{ relLangURL (strings.TrimPrefix "/" .) }}"{{ end }}
+           class="site-badge not-prose hx:inline-flex hx:items-center hx:rounded-full hx:gap-2 hx:px-3 hx:py-1 hx:text-xs hx:text-gray-600 hx:dark:text-gray-400 hx:bg-gray-100 hx:dark:bg-neutral-800 hx:border-gray-200 hx:dark:border-neutral-800 hx:border hx:hover:border-gray-400 hx:dark:hover:text-gray-50 hx:dark:hover:border-gray-600 hx:transition-all hx:ease-in hx:duration-200">
+          <span class="site-badge-dot" aria-hidden="true"></span>{{ . }}
+        </a>
+        {{- end -}}
+
+        <h1 class="site-headline not-prose hx:text-4xl hx:font-bold hx:leading-none hx:tracking-tighter hx:md:text-5xl hx:py-2">
+          {{- $h.headline | default site.Title -}}
+        </h1>
+
+        {{- with $h.subtitle -}}
+        <p class="site-subtitle not-prose hx:text-xl hx:text-gray-600 hx:dark:text-gray-400 hx:sm:text-xl">{{ . | markdownify }}</p>
+        {{- end -}}
+
+        {{- with $h.intro -}}
+        <p class="site-intro not-prose">{{ . | markdownify }}</p>
+        {{- end -}}
+
+        {{- with $h.buttonText -}}
+        <a href="{{ relLangURL (strings.TrimPrefix "/" ($h.buttonLink | default "/research")) }}"
+           class="site-button not-prose hx:font-medium hx:cursor-pointer hx:px-6 hx:py-3 hx:rounded-full hx:text-center hx:text-white hx:inline-block hx:bg-primary-600 hx:hover:bg-primary-700 hx:hextra-focus-visible hx:dark:bg-primary-600 hx:dark:hover:bg-primary-700 hx:transition-all hx:ease-in hx:duration-200">
+          {{- . -}}
+        </a>
+        {{- end -}}
+      </section>
+
+      {{/* ---------------- card grids ---------------- */}}
+      {{- $pubs := where site.RegularPages "Section" "research" -}}
+      {{- $pubs = where $pubs "CurrentSection.File.Dir" "research/publications/" -}}
+      {{- $posts := where site.RegularPages "Section" "blog" -}}
+
+      {{- range $grid := slice
+            (dict "title" "Publications" "link" "/research/publications" "pages" $pubs "n" ($h.publications | default 3))
+            (dict "title" "Writing" "link" "/blog" "pages" $posts "n" ($h.writing | default 3)) -}}
+        {{- with $grid.pages -}}
+        <section class="site-grid">
+          <div class="site-grid-head">
+            <h2 class="site-grid-title">{{ $grid.title }}</h2>
+            <a class="site-grid-more" href="{{ relLangURL (strings.TrimPrefix "/" $grid.link) }}">All {{ lower $grid.title }} &rarr;</a>
+          </div>
+          <div class="hextra-cards hx:mt-4 hx:gap-4 hx:grid not-prose" style="--hextra-cards-grid-cols: 3;">
+            {{- range first $grid.n (sort . "Date" "desc") -}}
+              {{- partial "shortcodes/card.html" (dict
+                    "link" .RelPermalink
+                    "title" (partial "utils/title" .)
+                    "subtitle" (partial "card-subtitle.html" .)
+                    "image" (partial "card-thumb.html" .)
+                    "alt" "") -}}
+            {{- end -}}
+          </div>
+        </section>
+        {{- end -}}
+      {{- end -}}
+
+      {{- with .Content -}}
+      <div class="content site-home-extra">{{ . }}</div>
+      {{- end -}}
+    </div>
+  </main>
+</div>
+{{ end }}

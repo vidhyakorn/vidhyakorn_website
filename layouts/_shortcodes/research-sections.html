@@ -1,0 +1,17 @@
+{{/* research-sections — the child sections of the current page as cards,
+     Osuny-style: Publications, Projects, Methods, each with its description
+     and how many entries it holds. Used on content/research/_index.md. */}}
+{{- $icons := dict "publications" "document-text" "projects" "beaker" "methods" "adjustments" -}}
+<div class="hextra-cards hx:mt-4 hx:gap-4 hx:grid not-prose" style="--hextra-cards-grid-cols: 3;">
+  {{- range .Page.Sections.ByWeight -}}
+    {{- $n := len .RegularPages -}}
+    {{- $key := path.Base .File.Dir -}}
+    {{- $sub := .Description -}}
+    {{- $sub = printf "%s  \n%d %s" $sub $n (cond (eq $n 1) "entry" "entries") -}}
+    {{- partial "shortcodes/card.html" (dict
+          "link" .RelPermalink
+          "title" (partial "utils/title" .)
+          "subtitle" $sub
+          "icon" (index $icons $key | default "folder")) -}}
+  {{- end -}}
+</div>

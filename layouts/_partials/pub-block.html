@@ -1,0 +1,38 @@
+{{/* pub-block.html — the citation panel under a publication's title.
+
+     Prints nothing unless the page names a DOI, a source or a link. When the
+     details were fetched it shows the authors, where and when it appeared, and
+     buttons to the paper and its DOI. When the page has no text of its own the
+     fetched abstract is printed too, so a publication needs nothing but a DOI.
+     If the lookup failed (a publisher that blocks robots, or an offline build)
+     only the link is shown — never an apology. */}}
+{{- $page := . -}}
+{{- $has := or $page.Params.doi $page.Params.source $page.Params.link $page.Params.external -}}
+{{- with $has -}}
+  {{- $m := partialCached "paper-meta.html" $page $page.RelPermalink -}}
+  {{- $url := or $page.Params.source $page.Params.link $page.Params.external $m.url -}}
+  {{- $url = $url | replaceRE `^['"]+` "" | replaceRE `['"]+$` "" -}}
+  {{- $doi := or $m.doi $page.Params.doi -}}
+  <div class="pub-meta not-prose">
+    {{- if $m.ok -}}
+      {{- with $m.authors }}<p class="pub-meta-authors">{{ delimit . ", " " and " }}</p>{{ end -}}
+      {{- $where := or $m.journal $m.publisher -}}
+      {{- if or $where $m.year -}}
+      <p class="pub-meta-where">
+        {{- with $m.journal }}<em>{{ . }}</em>{{ else }}{{ with $m.publisher }}{{ . }}{{ end }}{{ end -}}
+        {{- if and $where $m.year }}, {{ end }}{{ $m.year -}}
+      </p>
+      {{- end -}}
+    {{- end -}}
+    <div class="pub-actions">
+      {{- with $url }}<a class="pub-btn pub-btn-primary" href="{{ . }}" target="_blank" rel="noopener">Read the paper &rarr;</a>{{ end -}}
+      {{- with $doi }}<a class="pub-btn" href="https://doi.org/{{ . }}" target="_blank" rel="noopener">doi:{{ . }}</a>{{ end -}}
+    </div>
+  </div>
+  {{- if and $m.ok $m.abstract (not (strings.TrimSpace (replaceRE `(?s)<!--.*?-->` "" $page.RawContent))) -}}
+  <div class="pub-abstract">
+    <p class="pub-abstract-label">Abstract</p>
+    <p>{{ $m.abstract }}</p>
+  </div>
+  {{- end -}}
+{{- end -}}

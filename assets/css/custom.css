@@ -1,425 +1,353 @@
 /* ===========================================================================
-   Your own CSS. Loaded after the theme, so anything here wins.
-   Referenced from hugo.toml as:  customCSS = ['css/custom.css']
+   Your own CSS. Hextra loads assets/css/custom.css after its own styles, so
+   anything here wins. Fingerprinted automatically — a change renames the file,
+   so browsers can never show you a stale copy.
 
-   Edit, save, and refresh the browser (hugo server picks it up immediately).
+   CUSTOMISING.md explains each section.
    =========================================================================== */
 
 /* ===========================================================================
    PALETTE
-   Ink        #0D1A63   headings, primary text          15.6:1 on white
-   Deep       #1A2CA3   links, active navigation        10.9:1 on white
-   Bright     #2845D6   hover, focus rings, fills        7.2:1 on white
-   Flame      #F68048   decorative fills only            2.6:1 — never text
-   Signal     #CD071F   small features, tag accents      5.8:1 on white
+   Ink        #0D1A63   headings                         15.6:1 on white
+   Deep       #1A2CA3   links, buttons, active sidebar   10.9:1 on white
+   Bright     #2845D6   hover                             7.2:1 on white
+   Signal     #CD071F   small marks — badge dot, labels   5.8:1 on white
+   Flame      #F68048   decorative only                   2.6:1 — never text
 
-   Both surfaces are white, so the colour lives entirely in the navigation,
-   tabs, tags and small marks. Flame fails as text on white by a wide margin,
-   so it is used as a fill and always carries Ink text on top (6.0:1).
+   Hextra builds its whole blue scale from the three --primary-* numbers
+   below. Its buttons and links use the "600" step, which is lightness × 0.9,
+   so 41.2% here gives exactly #1A2CA3 for them.
    =========================================================================== */
-
 :root {
-  /* Surfaces — white sidebar, white page, white cards. */
-  --bg-primary: #FFFFFF;
-  --bg-surface: #FFFFFF;
-  --bg-sidebar: #FFFFFF;
-  --bg-code: #F5F6FB;
-  --bg-code-header: #E9ECF8;
+  --primary-hue: 232deg;
+  --primary-saturation: 72.5%;
+  --primary-lightness: 41.2%;
 
-  /* Text */
-  --text-primary: #141A2E;         /* 14.4:1 — body copy */
-  --text-secondary: #4A5170;       /*  7.8:1 — meta, captions */
-
-  /* Accents */
-  --accent: #1A2CA3;
-  --accent-warm: #CD071F;
-  --accent-soft: #F68048;
-
-  --accent-glow: rgba(40, 69, 214, 0.14);
-  --accent-warm-glow: rgba(205, 7, 31, 0.10);
-  --border: rgba(13, 26, 99, 0.16);
-  --border-warm: rgba(205, 7, 31, 0.22);
-  --grid-color: rgba(13, 26, 99, 0.05);
-  --corner-bracket: rgba(40, 69, 214, 0.42);
-  --selection-bg: rgba(246, 128, 72, 0.38);
-
-  /* Named tokens used by the rules further down. */
   --ink: #0D1A63;
   --deep: #1A2CA3;
   --bright: #2845D6;
-  --flame: #F68048;
   --signal: #CD071F;
+  --flame: #F68048;
+  --muted: #4A5170;       /* 7.8:1 — secondary text */
+  --line: rgba(13, 26, 99, 0.12);
 }
 
-[data-theme="dark"] {
-  --bg-primary: #0B0D1A;
-  --bg-surface: #12162A;
-  --bg-sidebar: #0D1020;
-  --bg-code: #141931;
-  --bg-code-header: #1B2140;
-
-  --text-primary: #E8EAF6;         /* 16.1:1 */
-  --text-secondary: #B9BFD6;       /* 10.6:1 */
-
-  /* The two dark blues disappear against a dark ground, so the same hues are
-     lifted. Signal red drops to 3.4:1 on this background and is replaced by a
-     lighter tint of itself. */
-  --accent: #8FA3FF;               /*  8.1:1 */
-  --accent-warm: #FF6B7D;          /*  7.0:1 */
-  --accent-soft: #F68048;          /*  7.5:1 */
-
-  --accent-glow: rgba(143, 163, 255, 0.18);
-  --accent-warm-glow: rgba(255, 107, 125, 0.12);
-  --border: rgba(232, 234, 246, 0.16);
-  --border-warm: rgba(255, 107, 125, 0.22);
-  --grid-color: rgba(232, 234, 246, 0.05);
-  --corner-bracket: rgba(143, 163, 255, 0.45);
-  --selection-bg: rgba(246, 128, 72, 0.32);
+/* Dark mode: the same hues, lifted so they stay readable on Hextra's
+   near-black background. */
+.dark {
+  /* 74% puts Hextra's "600" step at #617AF2 — 5.0:1 as text on the dark
+     background (the active sidebar item, links). */
+  --primary-hue: 230deg;
+  --primary-saturation: 85%;
+  --primary-lightness: 74%;
 
   --ink: #E8EAF6;
-  --deep: #8FA3FF;
-  --bright: #A9B8FF;
-  --flame: #FF9A66;
+  --deep: #9DAEFF;
+  --bright: #B9C5FF;
   --signal: #FF6B7D;
+  --flame: #FF9A66;
+  --muted: #B9BFD6;
+  --line: rgba(232, 234, 246, 0.14);
 }
 
-/* Headings carry the deepest blue; body copy stays near-black so long
-   passages don't read as tinted. */
-h1, h2, h3, h4, h5, h6,
-.article-header h1,
-.banner-content h1,
-.post-card h3 a,
-.site-title {
+/* ===========================================================================
+   TYPE — Osuny uses the reader's own system sans-serif, which is Hextra's
+   default too, so no web font is loaded. Headings take the deepest blue.
+   =========================================================================== */
+.content h1, .content h2, .content h3, .content h4,
+main h1 {
   color: var(--ink);
 }
 
-/* Small marks: the section rules above each block, and the decorative dot on
-   every card, are where Flame and Signal earn their keep. */
-.section-label::before,
-.section-label::after {
-  background: var(--flame);
-}
-.post-card-body::before {
-  background: linear-gradient(135deg, var(--bright), var(--signal));
-  opacity: 0.9;
-}
-
-/* Tags: outlined rather than filled, so a row of them reads as one texture
-   instead of a wall of colour. */
-.tag-list a,
-.tag-list .tag {
-  border: 1px solid var(--border);
+.content a:not(.hextra-card):not(.pub-btn):not(.cv-btn):not(.not-prose) {
   color: var(--deep);
-  background: transparent;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  text-underline-offset: 3px;
 }
-.tag-list a:hover,
-.tag-list .tag:hover {
-  background: var(--signal);
-  border-color: var(--signal);
-  color: #FFFFFF;
-}
-
-/* With a white sidebar against a white page the two need a seam. */
-.sidebar {
-  border-right: 1px solid var(--border);
+.content a:not(.hextra-card):not(.pub-btn):not(.cv-btn):not(.not-prose):hover {
+  color: var(--bright);
 }
 
 /* ===========================================================================
-   CARDS — one fixed height, image or no image
-   ---------------------------------------------------------------------------
-   Card height used to follow the length of the title and summary, so a listing
-   was a ragged column of 240–372px boxes. Every card is now pinned to the same
-   height and the text is clamped to fit, which is about a third shorter than
-   the tall ones were. Change --card-h to resize them all at once.
+   HOMEPAGE — hero, then card grids (layouts/hextra-home.html)
    =========================================================================== */
-@media (min-width: 901px) {
-  :root { --card-h: 230px; }
-
-  .post-card {
-    height: var(--card-h);
-    margin-bottom: 1.1rem;
-    overflow: hidden;
-  }
-
-  .post-card-body {
-    padding: 1.3rem 1.6rem;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .post-card-body::before {
-    top: 1.3rem;
-    right: 1.6rem;
-  }
-
-  .post-card-meta { margin-bottom: 0.45rem; }
-
-  /* Two lines of title, two of summary — anything longer is trimmed with an
-     ellipsis rather than pushing the card taller. */
-  .post-card h3 {
-    margin-bottom: 0.4rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .post-card p {
-    margin-bottom: 0.7rem;
-    -webkit-line-clamp: 2;
-  }
-
-  /* The cover fills its column and is cropped, so a tall portrait and a wide
-     screenshot occupy exactly the same space. */
-  .post-card-cover {
-    width: 240px;
-    height: 100%;
-    min-height: 0;
-    align-self: stretch;
-  }
-  .post-card-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+.site-home {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
 }
 
-/* On phones the card stacks with the image on top, so the image is what gets
-   a fixed height instead of the whole card. */
-@media (max-width: 900px) {
-  .post-card-cover {
-    height: 150px;
-    min-height: 0;
-    max-height: 150px;
-  }
-  .post-card-cover img {
-    height: 100%;
-    object-fit: cover;
-  }
-  .post-card h3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-}
-
-/* Fallback tile — drawn when a post has no image of its own and no external
-   link to borrow one from, so a listing stays even. */
-.post-card-cover--blank {
+.site-hero {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background:
-    repeating-linear-gradient(45deg,
-      rgba(255, 255, 255, 0.06) 0 8px,
-      transparent 8px 16px),
-    linear-gradient(135deg, var(--tile-a), var(--tile-b));
-  --tile-a: #0D1A63;
-  --tile-b: #2845D6;
-}
-/* Blue-dominant: red and orange are meant to be small marks, not a wall of
-   colour, so they only ever appear as the far stop of a gradient. */
-.post-card-cover--blank[data-variant="1"] { --tile-a: #0D1A63; --tile-b: #1A2CA3; }
-.post-card-cover--blank[data-variant="2"] { --tile-a: #1A2CA3; --tile-b: #2845D6; }
-.post-card-cover--blank[data-variant="3"] { --tile-a: #0D1A63; --tile-b: #CD071F; }
-.post-card-cover--blank[data-variant="4"] { --tile-a: #1A2CA3; --tile-b: #F68048; }
-
-.post-card-cover--blank span {
-  font-family: var(--font-display);
-  font-size: 3rem;
-  line-height: 1;
-  color: #FFFFFF;
-  opacity: 0.9;
-  text-shadow: 0 1px 3px rgba(13, 26, 99, 0.45);
-  user-select: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 0 3rem;
 }
 
-/* The banner's gradient bleeds 400px into the page below it, which tints the
-   top of what should be a white reading area. Pulled back to a short fade so
-   the body is white from the first card down. */
-.banner-bg,
-.banner-image {
-  bottom: 0;
-  mask-image: linear-gradient(to bottom, black 78%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 78%, transparent 100%);
+.site-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--signal);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal) 18%, transparent);
+}
+
+.site-headline {
+  color: var(--ink);
+  max-width: 22ch;
+  line-height: 1.12;
+  margin: 0.25rem 0 0;
+}
+
+.site-subtitle {
+  margin: 0;
+  max-width: 44rem;
+}
+
+.site-intro {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.site-button {
+  margin-top: 0.75rem;
+}
+/* In dark mode the scale's button blue is too light to carry white text, so
+   the button takes a deeper blue of its own (white on it: 5.6:1). */
+.dark .site-button {
+  background-color: #3756EF;
+}
+.dark .site-button:hover {
+  background-color: #2845D6;
+}
+
+.site-grid {
+  margin-bottom: 3rem;
+}
+.site-grid-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.5rem;
+}
+.site-grid-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+.site-grid-more {
+  font-size: 0.875rem;
+  color: var(--deep);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.site-grid-more:hover {
+  color: var(--bright);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* ===========================================================================
-   PUBLICATION METADATA
-   The block printed under the title of a paper whose details were imported
-   from its DOI or source page.
+   CARDS — every picture cropped to the same 16:9 box, so a grid stays even
+   whatever mix of portraits, screenshots and tiles it holds.
+   =========================================================================== */
+.hextra-card .hextra-card-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.hextra-card:has(.hextra-card-image) {
+  overflow: hidden;
+}
+.hextra-card:hover .hextra-card-image {
+  transform: scale(1.03);
+}
+
+/* Titles up to three lines, then an ellipsis — a long paper title can't make
+   one card taller than its neighbours. */
+.hextra-card .hextra-card-icon {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.35;
+}
+.hextra-card:hover .hextra-card-icon {
+  color: var(--deep);
+}
+
+/* A thin Flame rule appears along the top of a card on hover — the one place
+   the orange is used, and only as a mark. */
+.hextra-card {
+  position: relative;
+}
+.hextra-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: var(--flame);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+.hextra-card:hover::after {
+  transform: scaleX(1);
+}
+
+.site-empty {
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 1rem;
+}
+
+/* ===========================================================================
+   PUBLICATION PANEL — layouts/_partials/pub-block.html
    =========================================================================== */
 .pub-meta {
-  margin: 0 0 1.5rem;
-  padding: 0.9rem 1.1rem;
-  border: 1px solid var(--border);
+  margin: 0.5rem 0 1.75rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--line);
   border-left: 3px solid var(--flame);
-  border-radius: 8px;
-  background: var(--bg-surface);
+  border-radius: 0.5rem;
 }
 .pub-meta-authors {
-  color: var(--text-primary);
   margin: 0 0 0.3rem;
-  font-size: 0.98rem;
+  color: var(--ink);
+  line-height: 1.5;
 }
 .pub-meta-where {
-  color: var(--text-secondary);
   margin: 0;
-  font-size: 0.9rem;
+  color: var(--muted);
+  font-size: 0.925rem;
 }
-.pub-meta-where em { font-style: italic; }
 .pub-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 0.8rem;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+.pub-meta > .pub-actions:first-child {
+  margin-top: 0;
 }
 .pub-btn {
   display: inline-block;
-  padding: 6px 13px;
+  padding: 0.35rem 0.85rem;
   border: 1px solid var(--deep);
   border-radius: 999px;
   font-size: 0.83rem;
-  line-height: 1.25;
-  text-decoration: none;
+  line-height: 1.3;
   color: var(--deep);
-  white-space: nowrap;
+  text-decoration: none;
   transition: background 0.15s, color 0.15s;
 }
-.pub-btn:hover { background: var(--deep); color: #FFFFFF; }
-.pub-btn-primary { background: var(--deep); color: #FFFFFF; }
-.pub-btn-primary:hover { background: var(--bright); color: #FFFFFF; }
-.pub-actions-bare {
-  margin: 0 0 1.4rem;
+.pub-btn:hover {
+  background: var(--deep);
+  color: #fff;
+}
+.pub-btn-primary {
+  background: var(--deep);
+  color: #fff;
+}
+.pub-btn-primary:hover {
+  background: var(--bright);
+  border-color: var(--bright);
+}
+.dark .pub-btn:hover,
+.dark .pub-btn-primary {
+  color: #0B0D1A;
 }
 
-.pub-doi {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  word-break: break-all;
+.pub-abstract {
+  margin-bottom: 1.5rem;
 }
 .pub-abstract-label {
   font-size: 0.75rem;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--signal);
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.35rem;
 }
 
 /* ===========================================================================
-   TYPE
-   IM Fell English ships regular and italic only. Asking for 600 makes the
-   browser fake a bold, which smears a face this delicate — so headings are
-   set at 400 and rely on size for hierarchy.
+   FIGURES — layouts/_shortcodes/figure.html
+   width="…" caps a diagram; align="left"/"right" floats it.
    =========================================================================== */
-h1, h2, h3, h4, h5, h6,
-.article-header h1,
-.post-card-title,
-.banner-title {
-  font-weight: 400;
-  letter-spacing: 0.005em;
+.figure-block {
+  margin: 1.75rem auto;
+  text-align: center;
 }
-
-.single-layout > .article-content h2,
-.single-layout > .article-content h3,
-.single-layout > .article-content h4,
-.single-layout > .article-content h5,
-.single-layout > .article-content h6,
-.article-header h1,
-.banner-content h1,
-.post-card h3,
-.post-card h3 a,
-.section-label,
-.sidebar h3 {
-  font-weight: 400;
+.figure-block .figure-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 0.5rem;
+  border: 1px solid var(--line);
 }
-
-/* EB Garamond has a small x-height, so 1rem reads noticeably smaller than the
-   sans it replaces. The reading column is nudged up to compensate. */
-.single-layout > .article-content p,
-.single-layout > .article-content ul,
-.single-layout > .article-content ol {
-  font-size: 1.06rem;
-  line-height: 1.72;
+.figure-block figcaption {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-top: 0.6rem;
+  line-height: 1.5;
 }
-
-/* ===========================================================================
-   SPACING — desktop only; the theme already compacts below 900px
-   =========================================================================== */
-@media (min-width: 901px) {
-  .main-content {
-    padding: 2rem 1.75rem;
+@media (min-width: 701px) {
+  .figure-left,
+  .figure-right {
+    max-width: 45%;
+    margin-block: 0.3rem 1rem;
   }
-
-  .banner {
-    height: 34vh;
-    min-height: 220px;
-  }
-  .banner + .main-content {
-    margin-top: -80px;
-  }
-
-  .article-content {
-    padding: 2rem 2.25rem;
-  }
-
-  .single-layout > .article-content h2,
-  .single-layout > .article-content h3,
-  .single-layout > .article-content h4,
-  .single-layout > .article-content h5,
-  .single-layout > .article-content h6 {
-    margin-block: 1.6rem 0.55rem;
-  }
-
-  .single-layout > .article-content p,
-  .single-layout > .article-content ul,
-  .single-layout > .article-content ol {
-    margin-block: 0 0.85rem;
-  }
-
-  .related-posts,
-  .series-nav,
-  .share-buttons {
-    margin-block: 1.4rem;
-  }
+  .figure-left  { float: left;  margin-right: 1.5rem; }
+  .figure-right { float: right; margin-left: 1.5rem; }
+}
+.content img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* ===========================================================================
    ABOUT PAGE
    =========================================================================== */
-
-/* Portrait at the top of the About page. Targets the image in the first
-   paragraph of an article, which is where the photo sits. Change max-width to
-   resize it; 220px is about a third of the column. */
-.article-content > p:first-child img {
-  max-width: 220px;
-  height: auto;
-  border-radius: 10px;
+/* The portrait at the top of About — any image whose file name starts with
+   "profile" in content/about/. Change 200px to resize it. */
+.content img[src*="/about/profile"] {
+  max-width: 200px;
+  margin-inline: auto;
+  border-radius: 0.75rem;
 }
 
-/* --- Embedded CV --------------------------------------------------------- */
+/* Embedded CV — layouts/_shortcodes/cv.html */
 .cv-embed {
-  margin: 2rem 0;
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  margin: 1.5rem 0;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
   overflow: hidden;
 }
 .cv-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  background: var(--bg-code);
-  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--deep) 4%, transparent);
 }
-.cv-title { font-weight: 400; color: var(--ink); }
-.cv-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.cv-btn {
+.cv-title { font-weight: 600; color: var(--ink); }
+.cv-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.content .cv-btn {
   display: inline-block;
-  padding: 7px 14px;
+  padding: 0.4rem 0.9rem;
   border: 1px solid var(--deep);
   border-radius: 999px;
   font-size: 0.85rem;
@@ -427,63 +355,39 @@ h1, h2, h3, h4, h5, h6,
   text-decoration: none;
   color: var(--deep);
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s;
 }
-.cv-btn:hover { background: var(--deep); color: #FFFFFF; }
-.cv-btn-primary { background: var(--deep); color: #FFFFFF; }
-.cv-btn-primary:hover { background: var(--bright); color: #FFFFFF; }
+.content .cv-btn:hover { background: var(--deep); color: #fff; }
+.content .cv-btn-primary { background: var(--deep); color: #fff; }
+.content .cv-btn-primary:hover { background: var(--bright); color: #fff; }
+.dark .content .cv-btn-primary,
+.dark .content .cv-btn:hover { color: #0B0D1A; }
 .cv-frame { display: block; width: 100%; border: 0; }
-.cv-fallback, .cv-missing { padding: 20px; margin: 0; }
-.cv-mobile-note { display: none; padding: 16px; margin: 0; }
-
-/* Phones and small tablets won't render an inline PDF reliably (iOS in
-   particular), so show a link instead of an empty box. */
+.cv-fallback, .cv-missing { padding: 1.25rem; margin: 0; }
+.cv-mobile-note { display: none; padding: 1rem; margin: 0; }
 @media (max-width: 700px) {
   .cv-frame { display: none; }
   .cv-mobile-note { display: block; }
 }
 
 /* ===========================================================================
-   FIGURES
-   The theme stretches every figure to the full column width. A diagram is
-   usually better smaller, so the width given to the shortcode caps it and the
-   figure stays centred; align="left"/"right" floats it instead.
+   SIDEBAR & PAGE TITLES
+   Paper titles are long. In the sidebar each is cut to two lines, so the tree
+   stays readable; give a page a short  linkTitle: "…"  in its front matter to
+   choose the sidebar label yourself. On the page the heading is set a little
+   smaller than Hextra's default, so a 25-word title doesn't fill the screen.
    =========================================================================== */
-.figure-block {
-  margin-inline: auto;
+.hextra-sidebar-item a > span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.figure-block figcaption {
-  font-size: 0.88rem;
-  color: var(--text-secondary);
-  margin-top: 0.6rem;
-  line-height: 1.5;
+/* The page you are on is shown in full. */
+.hextra-sidebar-item[data-active="true"] a > span {
+  -webkit-line-clamp: unset;
 }
-
-@media (min-width: 701px) {
-  .figure-left,
-  .figure-right {
-    max-width: 45%;
-    margin-block: 0.4rem 1rem;
-  }
-  .figure-left {
-    float: left;
-    margin-right: 1.6rem;
-  }
-  .figure-right {
-    float: right;
-    margin-left: 1.6rem;
-  }
-}
-
-/* Images dropped straight into the text with ![](…) are capped too, so an
-   oversized screenshot can't blow out the reading column. */
-.article-content img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Clicking any image in an article opens it full size (enableLightbox), so
-   show a cursor that says as much. */
-.article-content img[data-lightbox] {
-  cursor: zoom-in;
+main#content h1:not(.site-headline) {
+  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.1rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }

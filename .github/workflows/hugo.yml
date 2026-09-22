@@ -22,7 +22,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # Spectra requires Hugo Extended 0.157.0 or newer.
+      # Hextra needs Hugo 0.146.0 or newer; the extended build is kept for the
+      # image processing that resizes card pictures.
       HUGO_VERSION: 0.166.0
     steps:
       - name: Install Hugo CLI
@@ -37,8 +38,8 @@ jobs:
           fetch-depth: 0
       - name: Sanity check — the theme must be present
         run: |
-          test -f themes/hugo-theme-spectra/theme.toml \
-            || { echo "::error::themes/hugo-theme-spectra is missing from the repo"; exit 1; }
+          test -f themes/hextra/theme.toml \
+            || { echo "::error::themes/hextra is missing from the repo"; exit 1; }
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5

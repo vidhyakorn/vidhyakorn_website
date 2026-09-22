@@ -108,13 +108,13 @@ ignoreFiles = ['content/_templates/.*', '\.obsidian/.*']
   # grids of latest publications and writing) is generated automatically.
   # ---------------------------------------------------------------------------
   [params.home]
-    badge = 'MORU · Bangkok'
+    badge = 'About Me'
     badgeLink = '/about'
     headline = 'τὸ τέλος τοῦ βαλάνου ἐστὶ τὸ γενέσθαι δρῦς'
     subtitle = ' “an acorn’s telos is to become an oak tree.” — Aristotle '
-    intro = ' What do you think? Lets chat! '
-    buttonText = 'Read my research'
-    buttonLink = '/research'
+    intro = ' What do you think?  '
+    buttonText = 'What do you think? Lets chat! '
+    buttonLink = '/layouts/docs/single.html'
     # How many cards in each grid.
     publications = 3
     writing = 3

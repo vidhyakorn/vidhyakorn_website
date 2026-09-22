@@ -92,6 +92,8 @@ Monochrome, with one orange for anything that should stand out. At the top of
   --accent: #F68048;       /* the orange: button, badge dot, link underlines,
                               active sidebar bar, card hover line */
   --accent-text: #BD470F;  /* the same orange, darker, for orange words */
+  --accent-fill: #C64B10;  /* orange behind white text: buttons, filled pills */
+  --on-accent: #FFFFFF;    /* the text on --accent-fill */
 }
 ```
 
@@ -100,10 +102,12 @@ colour scale — search, focus rings, the active sidebar item — from one hue,
 saturation and lightness. Saturation `0%` makes all of it grey, which is what
 keeps the theme monochrome everywhere I haven't restyled by hand.
 
-**Why two oranges.** `#F68048` is only 2.6 : 1 against white — fine for a
-button or a line, unreadable as words. So it is always a *fill*, and whatever
-sits on it is black (7.3 : 1). Where the orange has to be text — "Abstract",
-"All publications →" — it uses `#BD470F`, the same hue darkened to 5.2 : 1.
+**Why three oranges.** The bright `#F68048` is only 2.6 : 1 against white, in
+either direction — unreadable as words, and white words on it are unreadable
+too. So it is used only where no text is involved: lines, dots, underlines.
+Buttons and anything else filled with orange use `#C64B10`, deep enough that
+their white text reads at 4.8 : 1. Where the orange *is* the text —
+"Abstract", "All publications →" — it uses `#BD470F` (5.2 : 1).
 Links are black with an orange underline, so the colour is in the line, never
 in the words.
 

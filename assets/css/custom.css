@@ -12,11 +12,14 @@
    --ink          #111111   headings, links, body text      18.9:1 on white
    --muted        #555555   dates, captions, card lines      7.5:1
    --accent       #F68048   highlights: button, badge dot, underlines, active
-                            sidebar bar, card hover line. A FILL, never text on
-                            white (2.6:1) — anything sitting on it is --ink
-                            (7.3:1).
+                            sidebar bar, card hover line. Never used as text,
+                            and never behind text (white on it is 2.6:1).
    --accent-text  #BD470F   the same orange, darkened for the few places it is
                             text: "Abstract" labels, "All … →" links  5.2:1
+   --accent-fill  #C64B10   the orange used BEHIND text — buttons and filled
+                            pills. Deep enough that white text on it reads
+                            at 4.8:1; the bright #F68048 is kept for lines,
+                            dots and underlines, where no text sits on it.
 
    Hextra builds its own colour scale from the three --primary-* numbers.
    Saturation 0 turns that whole scale grey, so every part of the theme that
@@ -34,7 +37,9 @@
   --wash: #F5F5F5;
   --accent: #F68048;
   --accent-text: #BD470F;
-  --on-accent: #111111;
+  --accent-fill: #C64B10;
+  --accent-fill-hover: #A83F0D;
+  --on-accent: #FFFFFF;
 }
 
 /* Dark mode. On Hextra's near-black the orange is fine as text (7.3:1), so
@@ -50,7 +55,9 @@
   --wash: #1B1B1B;
   --accent: #F68048;
   --accent-text: #F68048;
-  --on-accent: #111111;
+  --accent-fill: #C64B10;
+  --accent-fill-hover: #A83F0D;   /* hover goes darker, so white text stays readable (6.2:1) */
+  --on-accent: #FFFFFF;
 }
 
 ::selection {
@@ -174,15 +181,15 @@ h1, h2, h3, h4, h5, h6,
   line-height: 1.65;
 }
 
-/* The one filled orange element on the page. */
+/* Filled orange, white text. */
 .site-button {
   margin-top: 0.75rem;
-  background-color: var(--accent) !important;
+  background-color: var(--accent-fill) !important;
   color: var(--on-accent) !important;
   font-weight: 700;
 }
 .site-button:hover {
-  background-color: color-mix(in srgb, var(--accent) 85%, #000) !important;
+  background-color: var(--accent-fill-hover) !important;
 }
 
 .site-grid {
@@ -344,13 +351,15 @@ main#content h1:not(.site-headline) {
   background: color-mix(in srgb, var(--accent) 16%, transparent);
 }
 .pub-btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-fill);
+  border-color: var(--accent-fill);
   color: var(--on-accent);
   font-weight: 700;
 }
 .pub-btn-primary:hover {
-  background: color-mix(in srgb, var(--accent) 85%, #000);
+  background: var(--accent-fill-hover);
+  border-color: var(--accent-fill-hover);
+  color: var(--on-accent);
 }
 
 .pub-abstract {
@@ -454,13 +463,15 @@ main#content h1:not(.site-headline) {
   background: color-mix(in srgb, var(--accent) 16%, transparent);
 }
 .content .cv-btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-fill);
+  border-color: var(--accent-fill);
   color: var(--on-accent);
   font-weight: 700;
 }
 .content .cv-btn-primary:hover {
-  background: color-mix(in srgb, var(--accent) 85%, #000);
+  background: var(--accent-fill-hover);
+  border-color: var(--accent-fill-hover);
+  color: var(--on-accent);
 }
 .cv-frame { display: block; width: 100%; border: 0; }
 .cv-fallback, .cv-missing { padding: 1.25rem; margin: 0; }

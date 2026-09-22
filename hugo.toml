@@ -53,8 +53,12 @@ ignoreFiles = ['content/_templates/.*', '\.obsidian/.*']
   pageRef = '/about'
   weight = 3
 [[menu.main]]
-  name = 'Search'
+  name = 'Discuss'
+  pageRef = '/discuss'
   weight = 4
+[[menu.main]]
+  name = 'Search'
+  weight = 4.5
   [menu.main.params]
     type = 'search'
 # Icons on the far right. ORCID and Google Scholar are added in data/icons.yaml.
@@ -112,12 +116,34 @@ ignoreFiles = ['content/_templates/.*', '\.obsidian/.*']
     badgeLink = '/about'
     headline = 'τὸ τέλος τοῦ βαλάνου ἐστὶ τὸ γενέσθαι δρῦς'
     subtitle = ' “an acorn’s telos is to become an oak tree.” — Aristotle '
-    intro = ' What do you think?  '
-    buttonText = 'What do you think? Lets chat! '
-    buttonLink = '/layouts/docs/single.html'
+    intro = "What's on your mind?"
+    buttonText = 'Lets chat! '
+    buttonLink = '/discuss'
     # How many cards in each grid.
     publications = 3
     writing = 3
+
+  # ---------------------------------------------------------------------------
+  # Comments — giscus, stored as GitHub Discussions on the vidhyakorn/vma repo.
+  # Hextra's own giscus support: one thread per page, on every Research page
+  # and every Writing post, and it follows the light/dark switch. Turn it off
+  # for one page with  comments: false  in that page's front matter.
+  # IDs from https://giscus.app for this repository.
+  # ---------------------------------------------------------------------------
+  [params.comments]
+    enable = true
+    type = 'giscus'
+    [params.comments.giscus]
+      repo = 'vidhyakorn/vma'
+      repoId = 'R_kgDOUg27EQ'
+      category = 'General'
+      categoryId = 'DIC_kwDOUg27Ec4DGI17'
+      mapping = 'title'
+      strict = 0
+      reactionsEnabled = 1
+      emitMetadata = 1
+      inputPosition = 'top'
+      lang = 'en'
 
   [params.navbar]
     displayTitle = true

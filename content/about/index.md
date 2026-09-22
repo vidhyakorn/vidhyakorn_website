@@ -6,8 +6,9 @@ draft: false
 toc: false
 description: "Research Assistant at MORU, Bangkok."
 ---
-
-![VMA](profile.jpg "Vidhyakorn Ameen Mahd-Adam", size)
+```
+```
+<figure> <img src="profile.jpg" alt="vma"> <figcaption> <a href="https://share.google" target="_blank" rel="noopener">At Blackwell's Bookstore.</a> </figcaption> </figure>
 
 I'm a research assistant at [Mathematical and Economic Modeling Group](https://www.tropmed.ac/units/moru-bangkok/mathematical-and-economic-modelling) at [Mahidol Oxford Tropical Medicine Research Unit (MORU) in Bangkok](https://www.tropmed.ac/units/moru-bangkok), Thailand, where I am working on epidemiological modelling of infectious diseases, health policy analysis, and understanding of health, disease, well-being from interdisciplinary perspective. I use quantitative methods through mathematical modeling approach to understand real-world public health challenges in LMIC contexts.
 

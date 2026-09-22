@@ -17,9 +17,9 @@ I am deeply interested in the History and Philosophy of Science and Medicine. I 
 
 ## At a glance
 
-- **Position** — Research Assistant, Mahidol-Oxford Tropical Medicine Research Unit (MORU), Bangkok, Thailand
+- **Position** — Research Assistant, Mathematical and Economic Modeling Group (MAEMOD) at Mahidol-Oxford Tropical Medicine Research Unit (MORU)
 - **Location** — Bangkok, Thailand
-- **Focus** —   - Computational Methods Population · Dynamic ·  Capabilities Approach ·  Bio-psychosocial Model ·  Neurodiversity ·  Social Deviant & -Others ·  Social Theories of Health and Diseases
+- **Focus** —   - Computational Methods ·  [*Capabilities Approach*](https://plato.stanford.edu/entries/capability-approach/) ·  [*Biopsychosocial Model*](https://en.wikipedia.org/wiki/Biopsychosocial_model) ·  [*Neurodiversity*](http://dickyricky.com/books/psych/NeuroDiversity%20-%20The%20Birth%20of%20an%20Idea%20-%20Judy%20Singer.pdf) ·  [*Social Deviant & Social Others*](https://en.wikipedia.org/wiki/Deviance_(sociology)) ·  [*Philosophy of Science and Medicine*](https://philpapers.org/browse/philosophy-of-science-misc/) · [*Blue Skies Research*](https://en.wikipedia.org/wiki/Blue_skies_research)
 
 ## Curriculum vitae
 

@@ -58,7 +58,7 @@ In `hugo.toml`, under `[params.home]`:
 
 ```toml
 [params.home]
-  badge = 'MORU · Bangkok'           # the small pill at the top, with the red dot
+  badge = 'MORU · Bangkok'           # the small pill at the top, with the orange dot
   badgeLink = '/about'
   headline = 'τὸ τέλος τοῦ βαλάνου ἐστὶ τὸ γενέσθαι δρῦς'
   subtitle = '“An acorn’s telos is to become an oak tree.” — Aristotle'
@@ -78,56 +78,75 @@ below the grids.
 
 ## Colours
 
-At the top of `assets\css\custom.css`:
+Monochrome, with one orange for anything that should stand out. At the top of
+`assets\css\custom.css`:
 
 ```css
 :root {
-  --primary-hue: 232deg;
-  --primary-saturation: 72.5%;
-  --primary-lightness: 41.2%;
+  --primary-hue: 0deg;
+  --primary-saturation: 0%;       /* 0% = Hextra's whole colour scale is grey */
+  --primary-lightness: 11.3%;
 
-  --ink: #0D1A63;      /* headings */
-  --deep: #1A2CA3;     /* links, buttons */
-  --bright: #2845D6;   /* hover */
-  --signal: #CD071F;   /* small marks: the badge dot, "Abstract" labels */
-  --flame: #F68048;    /* decorative only: card hover line, citation panel edge */
+  --ink: #111111;          /* headings, links, text */
+  --muted: #555555;        /* dates, captions, card lines */
+  --accent: #F68048;       /* the orange: button, badge dot, link underlines,
+                              active sidebar bar, card hover line */
+  --accent-text: #BD470F;  /* the same orange, darker, for orange words */
 }
 ```
 
-The three `--primary-*` numbers are how Hextra works: it builds its entire blue
-scale — buttons, the active sidebar item, focus rings — from one hue,
-saturation and lightness. Its buttons use lightness × 0.9, which is why 41.2%
-comes out as exactly `#1A2CA3`. To move to a different main colour, find its
-HSL values (any colour picker shows them) and divide the lightness by 0.9.
+The three `--primary-*` numbers are how Hextra works: it builds its entire
+colour scale — search, focus rings, the active sidebar item — from one hue,
+saturation and lightness. Saturation `0%` makes all of it grey, which is what
+keeps the theme monochrome everywhere I haven't restyled by hand.
 
-Contrast on white, for reference — text needs at least 4.5 : 1:
+**Why two oranges.** `#F68048` is only 2.6 : 1 against white — fine for a
+button or a line, unreadable as words. So it is always a *fill*, and whatever
+sits on it is black (7.3 : 1). Where the orange has to be text — "Abstract",
+"All publications →" — it uses `#BD470F`, the same hue darkened to 5.2 : 1.
+Links are black with an orange underline, so the colour is in the line, never
+in the words.
 
-| Colour | Contrast | Safe for text? |
-|---|---|---|
-| `#0D1A63` Ink | 15.6 : 1 | yes |
-| `#1A2CA3` Deep | 10.9 : 1 | yes |
-| `#2845D6` Bright | 7.2 : 1 | yes |
-| `#CD071F` Signal | 5.8 : 1 | yes |
-| `#F68048` Flame | 2.6 : 1 | **no** — fills and lines only |
+To swap the orange for another colour, change `--accent`, then pick a darker
+version for `--accent-text` and check it reaches 4.5 : 1 at
+[webaim.org/resources/contrastchecker](https://webaim.org/resources/contrastchecker/).
 
-Dark mode has its own values just below, under `.dark { … }`. The dark blues
-are lifted there, because `#1A2CA3` disappears against a black background.
+Dark mode has its own values just below, under `.dark { … }`. On a black
+background the orange is readable as text, so there `--accent-text` is the
+orange itself.
 
 ---
 
 ## Fonts
 
-The site uses each reader's own system font — San Francisco on a Mac, Segoe UI
-on Windows — exactly as Osuny does. Nothing is downloaded, so text appears
-instantly.
+| Used for | Font | Where it comes from |
+|---|---|---|
+| Headings, menu, buttons, card titles | Linux Biolinum O → Libertinus Sans | `static\fonts\` |
+| Body text | Spectral | `static\fonts\` |
 
-To use a web font instead, add the Google Fonts `<link>` to
-`layouts\_partials\custom\head-end.html` (create it) and set it in
-`custom.css`:
+**About Linux Biolinum O.** It isn't published anywhere a website can load it
+from, so the site asks for it first — anyone who has it installed (it ships with
+TeX Live and LibreOffice) sees it — and otherwise uses **Libertinus Sans**, the
+maintained fork of Biolinum: the same letterforms, with years of fixes since. It also covers polytonic Greek,
+which the homepage headline needs.
+
+To serve the original Biolinum to everyone instead, copy `LinBiolinum_R.otf`
+and `LinBiolinum_RB.otf` from your TeX Live folder
+(`texmf-dist\fonts\opentype\public\libertine\`) into `static\fonts\` and ask me
+to wire them in.
+
+Both fonts are kept in the repo rather than loaded from Google, so nothing is
+fetched from a third party.
+They are loaded in `layouts\_partials\custom\head-end.html`, and assigned in the
+`FONTS` section of `custom.css`:
 
 ```css
-body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+--font-heading: 'Linux Biolinum O', 'Linux Biolinum', 'Libertinus Sans', …;
+--font-body: 'Spectral', Georgia, 'Times New Roman', serif;
 ```
+
+Libertinus Sans comes in regular, italic and bold only, so headings are bold —
+asking for semibold would make the browser fake it.
 
 ---
 
@@ -140,8 +159,8 @@ body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
 2. `cover: "https://example.org/picture.jpg"` — any image on the web.
 3. `link: "https://journal.org/article"` — the site uses that page's preview
    image.
-4. Nothing — a coloured tile with the title's first letter. The colours are
-   chosen from the page's address, so each post keeps the same tile.
+4. Nothing — a dark tile with the title's first letter in orange. The shade
+   is chosen from the page's address, so each post keeps the same tile.
 
 Every picture is cropped to the same 16 : 9 box and converted to a small WebP
 when the site builds, so a 300 KB photo arrives as a few kilobytes and a grid

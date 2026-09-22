@@ -20,6 +20,17 @@
                  authors, journal, year and links, fetched at build time. */ -}}
           {{- partial "pub-block.html" . -}}
           {{ .Content }}
+
+    <!-- ⬇️ PASTE THE CODE DIRECTLY BELOW THE CONTENT ⬇️ -->
+    <footer class="post-footer">
+      {{ if not .Params.disableComments }}
+        <div class="discussion-trail">
+          {{ partial "comments.html" . }}
+        </div>
+      {{ end }}
+    </footer>
+    <!-- ⬆️ END OF DISCUSSION TRAIL ⬆️ -->
+
         </div>
         {{ partial "components/last-updated.html" . }}
         {{- if (site.Params.page.displayPagination | default true) -}}
